@@ -1,3 +1,0 @@
-[submodule "include/vst3"]
-	path = include/vst3
-	url = https://github.com/steinbergmedia/vst3_c_api

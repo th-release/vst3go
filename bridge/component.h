@@ -9,7 +9,7 @@ void* createComponent(void* goComponent);
 // Go callback declarations for IComponent
 extern Steinberg_tresult GoComponentInitialize(void* component, void* context);
 extern Steinberg_tresult GoComponentTerminate(void* component);
-extern void GoComponentGetControllerClassId(void* component, char* classId);
+extern void GoComponentGetControllerClassId(void* component, Steinberg_TUID classId);
 extern Steinberg_tresult GoComponentSetIoMode(void* component, int32_t mode);
 extern int32_t GoComponentGetBusCount(void* component, int32_t type, int32_t dir);
 extern Steinberg_tresult GoComponentGetBusInfo(void* component, int32_t type, int32_t dir, int32_t index, void* bus);

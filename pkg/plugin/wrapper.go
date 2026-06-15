@@ -301,7 +301,7 @@ func GoComponentTerminate(componentPtr unsafe.Pointer) C.Steinberg_tresult {
 }
 
 //export GoComponentGetControllerClassId
-func GoComponentGetControllerClassId(componentPtr unsafe.Pointer, classId *C.char) {
+func GoComponentGetControllerClassId(componentPtr unsafe.Pointer, classId *C.uint8_t) {
 	wrapper := getComponent(uintptr(componentPtr))
 	if wrapper == nil {
 		return
