@@ -99,7 +99,18 @@
   - [ ] Document how downstream repos should consume this fork once versions are tagged.
 - [ ] Keep build and validation instructions accurate for the retained runtime repo.
 
-## Phase 5: Cross-Platform Windows Support
+## Phase 5: Web Rendering Preview
+
+- [ ] Define the current layout sources and preview scope.
+  - [ ] Identify which existing structures need a web-facing mirror first.
+  - [ ] Decide whether the preview lives in-repo or as a companion app.
+- [ ] Make the current layouts renderable in a web preview.
+  - [ ] Reproduce the relevant UI/layout structure in React or an equivalent web renderer.
+  - [ ] Keep the rendered result visually aligned with the current source layout.
+  - [ ] Make the preview easy to run and compare locally.
+- [ ] Treat the web-rendered preview as the prerequisite for platform expansion work.
+
+## Phase 6: Cross-Platform Windows Support
 
 - [ ] Update the build system for Windows.
   - [ ] Detect Windows cleanly.
@@ -119,7 +130,7 @@
   - [ ] File locking and reload friction.
   - [ ] Path-length edge cases.
 
-## Phase 6: Release Readiness
+## Phase 7: Release Readiness
 
 - [ ] Keep architectural guardrails enforced.
 - [ ] Keep retained runtime packages tested and documented.
