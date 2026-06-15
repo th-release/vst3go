@@ -43,6 +43,9 @@ func DecibelFormatter(db float64) string {
 	if db <= -60 {
 		return "-∞ dB"
 	}
+	if math.Abs(db) < 0.05 {
+		db = 0
+	}
 	return fmt.Sprintf("%.1f dB", db)
 }
 

@@ -2,6 +2,7 @@ package param
 
 import (
 	"fmt"
+	"math"
 	"strings"
 )
 
@@ -80,6 +81,9 @@ func GainParameter(id uint32, name string) *Builder {
 		Formatter(func(v float64) string {
 			if v <= -80 {
 				return "-∞ dB"
+			}
+			if math.Abs(v) < 0.05 {
+				v = 0
 			}
 			return fmt.Sprintf("%.1f dB", v)
 		}, func(s string) (float64, error) {

@@ -1,3 +1,4 @@
+// Package midi provides MIDI event types, queues, and buffers for VST3 transport handling.
 package midi
 
 import (

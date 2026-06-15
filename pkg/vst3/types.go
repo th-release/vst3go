@@ -1,3 +1,4 @@
+// Package vst3 provides Go bindings and helper types for the VST3 SDK.
 package vst3
 
 // #include "../../include/vst3/vst3_c_api.h"

@@ -1,6 +1,9 @@
 package param
 
-import "testing"
+import (
+	"sync"
+	"testing"
+)
 
 func TestRegistryAddRejectsDuplicateID(t *testing.T) {
 	reg := NewRegistry()
@@ -57,4 +60,41 @@ func TestRegistrySafeAccessors(t *testing.T) {
 	if _, ok := reg.GetPlain(99); ok {
 		t.Fatal("GetPlain(99) should report missing parameter")
 	}
+}
+
+func TestRegistryConcurrentAccess(t *testing.T) {
+	reg := NewRegistry()
+	params := []*Parameter{
+		{ID: 1, Name: "One", Min: 0, Max: 1},
+		{ID: 2, Name: "Two", Min: -12, Max: 12},
+		{ID: 3, Name: "Three", Min: 0, Max: 127},
+	}
+
+	for _, param := range params {
+		if err := reg.Add(param); err != nil {
+			t.Fatalf("Add(%d) error = %v", param.ID, err)
+		}
+	}
+
+	var wg sync.WaitGroup
+	for i := 0; i < 8; i++ {
+		wg.Add(1)
+		go func(seed uint32) {
+			defer wg.Done()
+
+			for j := 0; j < 1_000; j++ {
+				id := params[(int(seed)+j)%len(params)].ID
+				_, _ = reg.GetOK(id)
+				_, _ = reg.GetNormalized(id)
+				_, _ = reg.GetPlain(id)
+				_ = reg.Has(id)
+				_ = reg.Get(id)
+				_ = reg.GetByIndex(int32(j % len(params)))
+				_ = reg.Count()
+				_ = reg.All()
+			}
+		}(uint32(i))
+	}
+
+	wg.Wait()
 }
