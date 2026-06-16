@@ -30,6 +30,9 @@ windows-package plugin_dll bundle_root='dist/windows' plugin_name='vst3go':
 windows-build plugin_dll bundle_root='dist/windows' plugin_name='vst3go':
   just windows-package "{{plugin_dll}}" "{{bundle_root}}" "{{plugin_name}}"
 
+windows-check-bundle bundle_root='dist/windows' plugin_name='vst3go':
+  bash scripts/check_windows_vst3.sh "{{bundle_root}}" "{{plugin_name}}"
+
 fix:
     just lint-fix
     just fmt

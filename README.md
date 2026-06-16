@@ -65,6 +65,7 @@ Windows-specific editor and packaging notes:
 - `bridge/bridge.c` exports `GetPluginFactory` for the Windows build.
 - `pkg/plugin/editor_view_windows.c` expects WebView2 headers and loader support.
 - `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL.
+- `just windows-check-bundle` validates the resulting bundle layout.
 - `docs/windows-build.md` describes the expected bundle shape.
 
 ## License
