@@ -67,6 +67,7 @@ Windows-specific editor and packaging notes:
 - `just windows-build-dll` builds the Windows shared library when the Windows toolchain is available.
 - `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL.
 - `just windows-check-bundle` validates the resulting bundle layout.
+- `just windows-release` runs build plus validation in one go.
 - `docs/windows-build.md` describes the expected bundle shape.
 
 ## License

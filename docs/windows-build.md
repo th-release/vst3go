@@ -25,6 +25,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - The repo ships `scripts/package_windows_vst3.sh`, `just windows-package`, and `just windows-build` to assemble the bundle from an already-built Windows DLL.
 - The repo also ships `scripts/check_windows_vst3.sh` and `just windows-check-bundle` to validate the resulting layout.
 - The repo also ships `scripts/build_windows_vst3.sh` and `just windows-build-dll` to build the DLL when a Windows toolchain is available.
+- `just windows-release` runs the build and the layout check together.
 
 ## Build Expectations
 
