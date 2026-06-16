@@ -142,6 +142,7 @@
 - [x] Decide supported release scope explicitly.
   - [x] Linux/macOS only, or include Windows.
   - [x] Runtime-only, with higher-level features delegated to companion repos.
+- [x] Capture a repeatable pre-tag release checklist.
 
 ## Ongoing Rules
 

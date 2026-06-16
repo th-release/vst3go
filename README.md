@@ -18,6 +18,7 @@ For Windows build and packaging notes, see [`docs/windows-build.md`](docs/window
 For the real Windows validation handoff checklist, see [`docs/windows-validation.md`](docs/windows-validation.md).
 For a ready-to-fill Windows validation run record, see [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md).
 For lifecycle, thread-safety, and persistence expectations, see [`docs/runtime-contracts.md`](docs/runtime-contracts.md).
+For pre-tag signoff, see [`docs/release-checklist.md`](docs/release-checklist.md).
 
 ## Scope
 
@@ -86,6 +87,7 @@ just test
 - This repo ships the VST3 binding/runtime layer, the web-rendered editor shell, and the Windows bundle/build harness that supports that shell.
 - This repo does not ship the higher-level DSP, showcase, or product-specific synth logic; those remain in `synthkit`.
 - Release validation for this repo is centered on `just test`, `just windows-smoke`, and the documented bundle/layout checks.
+- Final pre-tag review should follow `docs/release-checklist.md`.
 
 Windows-specific editor and packaging notes:
 
