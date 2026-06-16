@@ -39,6 +39,9 @@ windows-build-dll bundle_root='dist/windows' plugin_name='vst3go':
 windows-preflight:
   bash scripts/preflight_windows_vst3.sh
 
+windows-smoke:
+  bash scripts/windows_toolchain_smoke.sh
+
 windows-release bundle_root='dist/windows' plugin_name='vst3go':
   just windows-preflight
   VST3GO_WINDOWS_SKIP_PREFLIGHT=1 just windows-build-dll "{{bundle_root}}" "{{plugin_name}}"
