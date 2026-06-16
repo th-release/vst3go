@@ -79,15 +79,15 @@
   - [ ] Benchmark process-context internals.
   - [ ] Benchmark runtime hot paths where useful.
   - [ ] Revisit fixed-size internal buffers where limits may be too rigid.
-- [ ] Keep validation expectations explicit.
-  - [ ] Define minimal validation expectations for the runtime layer itself.
-  - [ ] Document what downstream repos such as `synthkit` must validate on their own.
+- [x] Keep validation expectations explicit.
+  - [x] Define minimal validation expectations for the runtime layer itself.
+  - [x] Document what downstream repos such as `synthkit` must validate on their own.
 
 ## Phase 4: Documentation And Consumer Experience
 
 - [ ] Document retained scope clearly.
   - [x] State the split boundary in README and PLAN.
-  - [ ] Add a concise “what belongs here vs. in `synthkit`” section if the README still needs tightening.
+  - [x] Add a concise “what belongs here vs. in `synthkit`” section if the README still needs tightening.
 - [ ] Improve API documentation.
   - [ ] package-level docs
   - [ ] lifecycle expectations

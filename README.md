@@ -59,6 +59,12 @@ just fmt-check
 just test
 ```
 
+## Validation
+
+- This repo validates the shared runtime layer with `just test` and the Windows build path with `just windows-smoke` when the host shell is available.
+- Platform-specific integration checks, host app behavior, and downstream DSP/plugin wiring belong in the companion `synthkit` repository or the consumer project.
+- Windows packaging and bundle layout checks in this repo stay focused on the generated DLL, header sidecar, and layout contract.
+
 Windows-specific editor and packaging notes:
 
 - `bridge/windows_dll.c` provides the DLL entry point.
