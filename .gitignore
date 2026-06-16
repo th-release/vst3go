@@ -84,3 +84,5 @@ docs/html/
 *.dump
 core
 core.*
+
+.gocache/
