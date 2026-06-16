@@ -47,6 +47,18 @@ EOF
 exec /usr/bin/dirname "$@"
 EOF
   chmod +x "$target_dir/dirname"
+
+  cat >"$target_dir/mkdir" <<'EOF'
+#!/bin/bash
+exec /bin/mkdir "$@"
+EOF
+  chmod +x "$target_dir/mkdir"
+
+  cat >"$target_dir/cp" <<'EOF'
+#!/bin/bash
+exec /bin/cp "$@"
+EOF
+  chmod +x "$target_dir/cp"
 }
 
 make_fake_compiler() {
@@ -96,6 +108,21 @@ if [[ "$selected_cc" != "$expected_cc" ]]; then
 fi
 
 PATH="$success_bin" bash "$repo_root/scripts/preflight_windows_vst3.sh" >/dev/null
+
+package_input_dir="$tmpdir/package-input"
+package_output_dir="$tmpdir/package-output"
+mkdir -p "$package_input_dir" "$package_output_dir"
+printf 'fake dll\n' > "$package_input_dir/vst3go.vst3"
+printf 'fake header\n' > "$package_input_dir/vst3go.h"
+printf 'fake loader\n' > "$package_input_dir/WebView2Loader.dll"
+
+bash "$repo_root/scripts/package_windows_vst3.sh" "$package_input_dir/vst3go.vst3" "$package_output_dir" >/dev/null
+bash "$repo_root/scripts/check_windows_vst3.sh" "$package_output_dir" >/dev/null
+
+if [[ ! -f "$package_output_dir/vst3go.vst3/Contents/x86_64-win/WebView2Loader.dll" ]]; then
+  echo "packager did not copy the WebView2 loader when present" >&2
+  exit 1
+fi
 
 failure_bin="$tmpdir/failure-bin"
 make_fake_wrappers "$failure_bin"
