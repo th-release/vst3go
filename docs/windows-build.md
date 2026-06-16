@@ -20,6 +20,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - The VST3 consumer should place the built library in the normal plugin bundle layout for the host.
 - The Windows host-side package should ship the DLL together with the WebView2 loader/runtime dependencies it expects.
 - The editor bridge should stay inside the plugin DLL; the web assets remain embedded in the binary.
+- The repo ships `scripts/package_windows_vst3.sh` and `just windows-package` to assemble the bundle from an already-built Windows DLL.
 
 ## Build Expectations
 
