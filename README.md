@@ -19,6 +19,7 @@ For the real Windows validation handoff checklist, see [`docs/windows-validation
 For a ready-to-fill Windows validation run record, see [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md).
 For lifecycle, thread-safety, and persistence expectations, see [`docs/runtime-contracts.md`](docs/runtime-contracts.md).
 For pre-tag signoff, see [`docs/release-checklist.md`](docs/release-checklist.md).
+For publishing notes, see [`docs/release-notes-template.md`](docs/release-notes-template.md).
 
 ## Scope
 
