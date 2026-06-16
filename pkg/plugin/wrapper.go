@@ -4,6 +4,7 @@ package plugin
 // #include "../../include/vst3/vst3_c_api.h"
 // #include "../../bridge/bridge.h"
 // #include "../../bridge/component.h"
+// #include "../../bridge/editor_view.h"
 // #include <stdlib.h>
 // #include <string.h>
 //
@@ -34,6 +35,7 @@ import (
 	"sync"
 	"unsafe"
 
+	"github.com/cwbudde/vst3go/pkg/framework/param"
 	"github.com/cwbudde/vst3go/pkg/vst3"
 )
 
@@ -42,6 +44,9 @@ type Component interface {
 	vst3.IComponent
 	vst3.IAudioProcessor
 	vst3.IEditController
+	GetParameters() *param.Registry
+	EditorModel() (*EditorModel, error)
+	SetParamNormalizedWithNotification(id uint32, value float64) error
 }
 
 // componentWrapper wraps a Go component for C callbacks
@@ -49,8 +54,9 @@ type componentWrapper struct {
 	component        Component
 	handle           unsafe.Pointer
 	id               uintptr
+	editorView       unsafe.Pointer
 	componentHandler unsafe.Pointer // IComponentHandler from host
-	handlerMu        sync.RWMutex   // Protects componentHandler access
+	handlerMu        sync.RWMutex   // Protects componentHandler and editorView access
 }
 
 var (
@@ -169,6 +175,32 @@ func (w *componentWrapper) notifyParamEndEdit(paramID uint32) {
 
 	// Call endEdit through helper function
 	C.componentHandler_endEdit((*C.Steinberg_Vst_IComponentHandler)(handler), C.Steinberg_Vst_ParamID(paramID))
+}
+
+func (w *componentWrapper) setEditorView(view unsafe.Pointer) {
+	w.handlerMu.Lock()
+	w.editorView = view
+	w.handlerMu.Unlock()
+}
+
+func (w *componentWrapper) clearEditorView(view unsafe.Pointer) {
+	w.handlerMu.Lock()
+	if w.editorView == view {
+		w.editorView = nil
+	}
+	w.handlerMu.Unlock()
+}
+
+func (w *componentWrapper) notifyEditorParameterChanged(paramID uint32, valueNormalized float64, plainValue float64) {
+	w.handlerMu.RLock()
+	view := w.editorView
+	w.handlerMu.RUnlock()
+
+	if view == nil {
+		return
+	}
+
+	C.VST3GoEditorViewUpdateParameter(view, C.Steinberg_Vst_ParamID(paramID), C.Steinberg_Vst_ParamValue(valueNormalized), C.Steinberg_Vst_ParamValue(plainValue))
 }
 
 //export GoGetFactoryInfo

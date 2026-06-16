@@ -13,6 +13,7 @@ extern "C" {
 
 typedef int32_t Steinberg_tresult;
 typedef int32_t Steinberg_int32;
+typedef int16_t Steinberg_int16;
 typedef int64_t Steinberg_int64;
 typedef uint32_t Steinberg_uint32;
 typedef uint8_t Steinberg_TBool;

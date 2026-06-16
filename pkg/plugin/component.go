@@ -46,6 +46,14 @@ func (c *componentImpl) parameterRegistry() (*param.Registry, error) {
 	return params, nil
 }
 
+func (c *componentImpl) GetParameters() *param.Registry {
+	if c.processor == nil {
+		return nil
+	}
+
+	return c.processor.GetParameters()
+}
+
 func (c *componentImpl) stateManager() (*state.Manager, error) {
 	params, err := c.parameterRegistry()
 	if err != nil {
@@ -505,7 +513,11 @@ func (c *componentImpl) SetComponentHandler(handler interface{}) error {
 }
 
 func (c *componentImpl) CreateView(name string) (interface{}, error) {
-	return nil, vst3.ErrNotImplemented
+	if name != "" && name != "editor" && name != "web" {
+		return nil, vst3.ErrNotImplemented
+	}
+
+	return c.EditorModel()
 }
 
 func (c *componentImpl) EditorModel() (*EditorModel, error) {
@@ -530,6 +542,7 @@ func (c *componentImpl) SetParamNormalizedWithNotification(id uint32, value floa
 			c.wrapper.notifyParamBeginEdit(id)
 			p.SetNormalized(value)
 			c.wrapper.notifyParamPerformEdit(id, value)
+			c.wrapper.notifyEditorParameterChanged(id, p.GetNormalized(), p.GetPlain())
 			c.wrapper.notifyParamEndEdit(id)
 		} else {
 			// Fallback if no wrapper available
