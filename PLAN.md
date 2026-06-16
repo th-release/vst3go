@@ -4,7 +4,7 @@
 
 - [x] Keep `vst3go` scoped as the VST3 binding/runtime layer.
 - [x] Move DSP packages, showcase plugins, and synth-product planning out to `synthkit`.
-- [x] Rename the module to `github.com/cwbudde/vst3go`.
+- [x] Rename the module to `github.com/th-release/vst3go`.
 - [x] Update the README to state that this fork intentionally differs from the original project.
 - [x] Review the retained package boundary once more.
   - [x] `pkg/vst3`

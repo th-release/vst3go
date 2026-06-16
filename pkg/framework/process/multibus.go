@@ -2,7 +2,7 @@
 package process
 
 import (
-	"github.com/cwbudde/vst3go/pkg/framework/bus"
+	"github.com/th-release/vst3go/pkg/framework/bus"
 )
 
 // BusBuffers represents audio buffers for a single bus

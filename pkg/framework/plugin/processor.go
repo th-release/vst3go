@@ -8,9 +8,9 @@
 package plugin
 
 import (
-	"github.com/cwbudde/vst3go/pkg/framework/bus"
-	"github.com/cwbudde/vst3go/pkg/framework/param"
-	"github.com/cwbudde/vst3go/pkg/framework/process"
+	"github.com/th-release/vst3go/pkg/framework/bus"
+	"github.com/th-release/vst3go/pkg/framework/param"
+	"github.com/th-release/vst3go/pkg/framework/process"
 )
 
 // BaseProcessor is a convenience helper for implementations of pkg/plugin.Processor.

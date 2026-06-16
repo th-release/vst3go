@@ -8,10 +8,10 @@ package plugin
 import (
 	"io"
 
-	"github.com/cwbudde/vst3go/pkg/framework/bus"
-	"github.com/cwbudde/vst3go/pkg/framework/param"
-	"github.com/cwbudde/vst3go/pkg/framework/plugin"
-	"github.com/cwbudde/vst3go/pkg/framework/process"
+	"github.com/th-release/vst3go/pkg/framework/bus"
+	"github.com/th-release/vst3go/pkg/framework/param"
+	"github.com/th-release/vst3go/pkg/framework/plugin"
+	"github.com/th-release/vst3go/pkg/framework/process"
 )
 
 // Plugin is the top-level runtime interface implemented by a plugin entrypoint.

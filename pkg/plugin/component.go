@@ -11,13 +11,13 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/cwbudde/vst3go/pkg/framework/bus"
-	"github.com/cwbudde/vst3go/pkg/framework/param"
-	"github.com/cwbudde/vst3go/pkg/framework/plugin"
-	"github.com/cwbudde/vst3go/pkg/framework/process"
-	"github.com/cwbudde/vst3go/pkg/framework/state"
-	"github.com/cwbudde/vst3go/pkg/midi"
-	"github.com/cwbudde/vst3go/pkg/vst3"
+	"github.com/th-release/vst3go/pkg/framework/bus"
+	"github.com/th-release/vst3go/pkg/framework/param"
+	"github.com/th-release/vst3go/pkg/framework/plugin"
+	"github.com/th-release/vst3go/pkg/framework/process"
+	"github.com/th-release/vst3go/pkg/framework/state"
+	"github.com/th-release/vst3go/pkg/midi"
+	"github.com/th-release/vst3go/pkg/vst3"
 )
 
 // componentImpl wraps a Processor to implement VST3 interfaces

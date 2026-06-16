@@ -1,8 +1,10 @@
 package plugin
 
-import "testing"
+import (
+	"testing"
 
-import _ "github.com/cwbudde/vst3go/pkg/plugin/cbridge"
+	_ "github.com/th-release/vst3go/pkg/plugin/cbridge"
+)
 
 func TestUTF16StringRoundTrip(t *testing.T) {
 	buffer := make([]uint16, 16)

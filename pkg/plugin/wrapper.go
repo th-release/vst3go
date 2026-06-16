@@ -35,8 +35,8 @@ import (
 	"sync"
 	"unsafe"
 
-	"github.com/cwbudde/vst3go/pkg/framework/param"
-	"github.com/cwbudde/vst3go/pkg/vst3"
+	"github.com/th-release/vst3go/pkg/framework/param"
+	"github.com/th-release/vst3go/pkg/vst3"
 )
 
 // Component interface that our componentImpl satisfies

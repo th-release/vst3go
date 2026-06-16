@@ -6,7 +6,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/cwbudde/vst3go/pkg/framework/param"
+	"github.com/th-release/vst3go/pkg/framework/param"
 )
 
 func TestManagerRejectsNilRegistry(t *testing.T) {

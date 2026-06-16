@@ -7,7 +7,7 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/cwbudde/vst3go/pkg/vst3"
+	"github.com/th-release/vst3go/pkg/vst3"
 )
 
 // IAudioProcessor callbacks

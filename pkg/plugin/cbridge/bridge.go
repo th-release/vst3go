@@ -3,7 +3,7 @@
 //
 // Usage:
 //
-//	import _ "github.com/cwbudde/vst3go/pkg/plugin/cbridge"
+//	import _ "github.com/th-release/vst3go/pkg/plugin/cbridge"
 //
 // The underscore import ensures the C bridge is linked without directly using any exports.
 package cbridge

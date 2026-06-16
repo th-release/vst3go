@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
-	frameworkbus "github.com/cwbudde/vst3go/pkg/framework/bus"
-	frameworkparam "github.com/cwbudde/vst3go/pkg/framework/param"
-	frameworkplugin "github.com/cwbudde/vst3go/pkg/framework/plugin"
-	"github.com/cwbudde/vst3go/pkg/framework/process"
-	"github.com/cwbudde/vst3go/pkg/vst3"
+	frameworkbus "github.com/th-release/vst3go/pkg/framework/bus"
+	frameworkparam "github.com/th-release/vst3go/pkg/framework/param"
+	frameworkplugin "github.com/th-release/vst3go/pkg/framework/plugin"
+	"github.com/th-release/vst3go/pkg/framework/process"
+	"github.com/th-release/vst3go/pkg/vst3"
 )
 
 type editorModelTestProcessor struct {
