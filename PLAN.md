@@ -99,16 +99,16 @@
   - [ ] Document how downstream repos should consume this fork once versions are tagged.
 - [ ] Keep build and validation instructions accurate for the retained runtime repo.
 
-## Phase 5: Web Rendering Preview
+## Phase 5: Web-Rendered Plugin UI
 
-- [ ] Define the current layout sources and preview scope.
-  - [ ] Identify which existing structures need a web-facing mirror first.
-  - [ ] Decide whether the preview lives in-repo or as a companion app.
-- [ ] Make the current layouts renderable in a web preview.
-  - [ ] Reproduce the relevant UI/layout structure in React or an equivalent web renderer.
-  - [ ] Keep the rendered result visually aligned with the current source layout.
-  - [ ] Make the preview easy to run and compare locally.
-- [ ] Treat the web-rendered preview as the prerequisite for platform expansion work.
+- [ ] Define the editor surface and render scope.
+  - [ ] Identify the current plugin UI entry points and what `createView` should expose.
+  - [ ] Decide which controls, layout blocks, and parameter bindings must be rendered first.
+- [ ] Make the editor renderable through a web-based surface.
+  - [ ] Add a web-rendered view path for the VST editor instead of a standalone site.
+  - [ ] Keep the rendered UI aligned with the current plugin design and controls.
+  - [ ] Make local editing and parameter changes visible immediately in the view.
+- [ ] Treat the web-rendered editor as the prerequisite for platform expansion work.
 
 ## Phase 6: Cross-Platform Windows Support
 
