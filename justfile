@@ -41,7 +41,7 @@ windows-preflight:
 
 windows-release bundle_root='dist/windows' plugin_name='vst3go':
   just windows-preflight
-  just windows-build-dll "{{bundle_root}}" "{{plugin_name}}"
+  VST3GO_WINDOWS_SKIP_PREFLIGHT=1 just windows-build-dll "{{bundle_root}}" "{{plugin_name}}"
   just windows-check-bundle "{{bundle_root}}" "{{plugin_name}}"
 
 fix:

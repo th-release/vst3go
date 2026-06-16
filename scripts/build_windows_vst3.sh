@@ -15,14 +15,16 @@ if [[ "$bundle_root" != /* ]]; then
 fi
 
 host_os="$(go env GOHOSTOS)"
-if [[ "$host_os" != "windows" ]]; then
+cc_bin="$(bash "${repo_root}/scripts/select_windows_cc.sh")"
+
+if [[ "$host_os" != "windows" && "${VST3GO_WINDOWS_SKIP_PREFLIGHT:-0}" != "1" ]]; then
   bash "${repo_root}/scripts/preflight_windows_vst3.sh"
 fi
 
 mkdir -p "${output_dir}/Contents/x86_64-win"
 (
   cd "$repo_root"
-  GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -buildmode=c-shared -o "$output_dll" ./cmd/vst3go-dll
+  CC="$cc_bin" GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -buildmode=c-shared -o "$output_dll" ./cmd/vst3go-dll
 )
 cp "${output_dll}.h" "${output_dir}/Contents/x86_64-win/${plugin_name}.h"
 echo "built Windows VST3 DLL at: $output_dll"

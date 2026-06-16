@@ -27,8 +27,8 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - The repo ships `scripts/package_windows_vst3.sh`, `just windows-package`, and `just windows-build` to assemble the bundle from an already-built Windows DLL, requiring the generated header sidecar.
 - The repo also ships `scripts/check_windows_vst3.sh` and `just windows-check-bundle` to validate the resulting layout, including the generated header sidecar.
 - The repo also ships `scripts/build_windows_vst3.sh` and `just windows-build-dll` to build the DLL when a Windows toolchain is available.
-- The repo also ships `scripts/preflight_windows_vst3.sh` and `just windows-preflight` to check the Windows compiler, WebView2 headers, and loader library before a build.
-- `just windows-release` runs preflight, the build, and the layout check together.
+- The repo also ships `scripts/select_windows_cc.sh`, `scripts/preflight_windows_vst3.sh`, and `just windows-preflight` to auto-select or verify a Windows compiler, WebView2 headers, and the loader library before a build.
+- `just windows-release` runs preflight once, then the build and the layout check together.
 
 ## Build Expectations
 

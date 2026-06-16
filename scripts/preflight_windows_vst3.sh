@@ -2,11 +2,14 @@
 set -euo pipefail
 
 host_os="$(go env GOHOSTOS)"
-cc_bin="${CC:-cc}"
 
 if [[ "$host_os" == "windows" ]]; then
   exit 0
 fi
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "${script_dir}/.." && pwd)"
+cc_bin="$(bash "${repo_root}/scripts/select_windows_cc.sh")"
 
 if ! printf '#include <windows.h>\n' | "$cc_bin" -E -x c - >/dev/null 2>&1; then
   echo "Windows build toolchain is not ready: need a compiler that can find <windows.h> (for example MinGW-w64)." >&2
