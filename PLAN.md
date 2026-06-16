@@ -118,8 +118,8 @@
   - [ ] Detect Windows cleanly.
   - [ ] Produce the correct library format and bundle layout.
 - [ ] Extend the bridge for Windows entry points.
-  - [ ] Add required DLL entry handling.
-  - [ ] Export `GetPluginFactory`.
+  - [x] Add required DLL entry handling.
+  - [x] Export `GetPluginFactory`.
   - [ ] Host the web-rendered editor with WebView2 on Windows.
   - [x] Lay down the Windows editor-view scaffold.
 - [ ] Review platform-specific CGO directives.

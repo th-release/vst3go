@@ -41,7 +41,7 @@ static struct Steinberg_IPluginFactoryVtbl factoryVtbl = {
 static PluginFactory* globalFactory = NULL;
 
 // VST3 SDK entry point - this is what hosts look for
-__attribute__((visibility("default")))
+VST3GO_EXPORT
 struct Steinberg_IPluginFactory* GetPluginFactory() {
     DBG_LOG("GetPluginFactory called");
     if (!globalFactory) {

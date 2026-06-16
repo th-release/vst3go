@@ -65,6 +65,8 @@ The Windows implementation should focus on:
 - `GetPluginFactory` export plumbing
 - build tags and CGO flags for the Windows toolchain
 
+The current scaffold already adds a Windows DLL entry point and marks `GetPluginFactory` for export; the remaining platform work is the actual WebView2 host integration.
+
 ## Why This Shape
 
 This approach keeps the editor surface portable while preserving the repo's boundary:

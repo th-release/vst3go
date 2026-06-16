@@ -3,6 +3,12 @@
 
 #include "../include/vst3/vst3_c_api.h"
 
+#if defined(_WIN32)
+#define VST3GO_EXPORT __declspec(dllexport)
+#else
+#define VST3GO_EXPORT __attribute__((visibility("default")))
+#endif
+
 // Go callback functions (will be implemented in Go with //export)
 
 // Factory callbacks

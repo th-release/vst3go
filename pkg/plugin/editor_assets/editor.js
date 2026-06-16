@@ -12,6 +12,11 @@ document.getElementById("plugin-meta").textContent = [model.plugin.category, mod
 function sendChange(id, value) {
   if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.vst3go) {
     window.webkit.messageHandlers.vst3go.postMessage({ type: "param-change", id, value });
+    return;
+  }
+
+  if (window.chrome && window.chrome.webview) {
+    window.chrome.webview.postMessage({ type: "param-change", id, value });
   }
 }
 
@@ -227,4 +232,21 @@ if (restoreButton) {
     hasSavedSnapshot = false;
   }
   restoreButton.disabled = !hasSavedSnapshot;
+}
+
+if (window.chrome && window.chrome.webview) {
+  window.chrome.webview.addEventListener("message", (event) => {
+    const payload = typeof event.data === "string" ? JSON.parse(event.data) : event.data;
+    if (!payload || payload.type !== "param-change") {
+      return;
+    }
+
+    const control = findControl(payload.id);
+    if (!control) {
+      return;
+    }
+
+    updateControl(control, Number(payload.normalized), Number(payload.plain), false);
+    persistSnapshot();
+  });
 }
