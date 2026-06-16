@@ -1,12 +1,14 @@
 package plugin
 
 import (
+	"errors"
 	"testing"
 
 	frameworkbus "github.com/cwbudde/vst3go/pkg/framework/bus"
 	frameworkparam "github.com/cwbudde/vst3go/pkg/framework/param"
 	frameworkplugin "github.com/cwbudde/vst3go/pkg/framework/plugin"
 	"github.com/cwbudde/vst3go/pkg/framework/process"
+	"github.com/cwbudde/vst3go/pkg/vst3"
 )
 
 type editorModelTestProcessor struct {
@@ -36,8 +38,9 @@ func TestBuildEditorModel(t *testing.T) {
 	normal := frameworkparam.New(1, "Gain").Range(-24, 24).Default(0).Build()
 	bypass := frameworkparam.New(2, "Bypass").Toggle().Bypass().Build()
 	meter := frameworkparam.New(3, "Output").Range(0, 1).ReadOnly().Build()
+	hidden := frameworkparam.New(4, "Hidden").Range(0, 1).Hidden().Build()
 
-	if err := registry.Add(normal, bypass, meter); err != nil {
+	if err := registry.Add(normal, bypass, meter, hidden); err != nil {
 		t.Fatalf("registry.Add() failed: %v", err)
 	}
 
@@ -60,8 +63,8 @@ func TestBuildEditorModel(t *testing.T) {
 	}
 
 	controls := model.Sections[0].Controls
-	if len(controls) != 3 {
-		t.Fatalf("len(controls) = %d, want 3", len(controls))
+	if len(controls) != 4 {
+		t.Fatalf("len(controls) = %d, want 4", len(controls))
 	}
 
 	if controls[0].Kind != "slider" {
@@ -72,6 +75,12 @@ func TestBuildEditorModel(t *testing.T) {
 	}
 	if controls[2].Kind != "meter" {
 		t.Fatalf("Output control kind = %q, want %q", controls[2].Kind, "meter")
+	}
+	if !controls[2].ReadOnly {
+		t.Fatal("Output control should be read-only")
+	}
+	if !controls[3].Hidden {
+		t.Fatal("Hidden control should be hidden")
 	}
 }
 
@@ -142,5 +151,37 @@ func TestEditorSnapshotApply(t *testing.T) {
 
 	if got := gain.GetNormalized(); got != 0.9 {
 		t.Fatalf("gain.GetNormalized() = %v, want %v", got, 0.9)
+	}
+}
+
+func TestComponentCreateView(t *testing.T) {
+	registry := frameworkparam.NewRegistry()
+	gain := frameworkparam.New(1, "Gain").Range(-24, 24).Default(0).Build()
+	if err := registry.Add(gain); err != nil {
+		t.Fatalf("registry.Add() failed: %v", err)
+	}
+
+	component := &componentImpl{
+		processor: &editorModelTestProcessor{
+			params: registry,
+			buses:  frameworkbus.Stereo(),
+		},
+		pluginInfo: frameworkplugin.Info{
+			ID:      "com.example.editor",
+			Name:    "Example Editor",
+			Version: "1.2.3",
+		},
+	}
+
+	view, err := component.CreateView("editor")
+	if err != nil {
+		t.Fatalf("CreateView(\"editor\") failed: %v", err)
+	}
+	if _, ok := view.(*EditorModel); !ok {
+		t.Fatalf("CreateView(\"editor\") = %T, want *EditorModel", view)
+	}
+
+	if _, err := component.CreateView("not-editor"); !errors.Is(err, vst3.ErrNotImplemented) {
+		t.Fatalf("CreateView(\"not-editor\") error = %v, want ErrNotImplemented", err)
 	}
 }

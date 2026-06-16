@@ -32,6 +32,8 @@ The shell only needs a bootstrap hook that injects the encoded snapshot before t
 
 The current runtime keeps the same shape in `pkg/plugin/editor_assets/` and embeds those files into the plugin binary; a later React build can replace that directory with generated output without changing the Go-side snapshot contract.
 
+The current shell already respects control metadata such as hidden and read-only flags, so the web renderer can stay aligned with the native parameter model while a React implementation grows in later.
+
 ## State Save And Restore
 
 There are two state layers:

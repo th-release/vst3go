@@ -26,4 +26,10 @@ func TestBuildEditorHTMLInjectsAssetsAndSnapshot(t *testing.T) {
 	if !strings.Contains(html, "window.__vst3goUpdateParameter") {
 		t.Fatal("embedded JS was not included")
 	}
+	if !strings.Contains(html, "control.hidden") {
+		t.Fatal("hidden control handling was not included")
+	}
+	if !strings.Contains(html, "control.readOnly") {
+		t.Fatal("read-only control handling was not included")
+	}
 }

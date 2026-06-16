@@ -3,6 +3,7 @@ package state
 import (
 	"bytes"
 	"errors"
+	"io"
 	"testing"
 
 	"github.com/cwbudde/vst3go/pkg/framework/param"
@@ -41,5 +42,49 @@ func TestManagerSaveLoadRoundTrip(t *testing.T) {
 
 	if got := p.GetPlain(); got != 6 {
 		t.Fatalf("GetPlain() after Load = %f, want 6", got)
+	}
+}
+
+func TestManagerSaveLoadCustomState(t *testing.T) {
+	reg := param.NewRegistry()
+	p := &param.Parameter{ID: 1, Name: "Gain", Min: 0, Max: 1}
+	p.SetNormalized(0.25)
+	if err := reg.Add(p); err != nil {
+		t.Fatalf("Add() error = %v", err)
+	}
+
+	const customPayload = "editor-snapshot"
+	var loadedPayload string
+
+	m := NewManager(reg)
+	m.SetCustomSaveFunc(func(w io.Writer) error {
+		_, err := io.WriteString(w, customPayload)
+		return err
+	})
+	m.SetCustomLoadFunc(func(r io.Reader) error {
+		payload, err := io.ReadAll(r)
+		if err != nil {
+			return err
+		}
+		loadedPayload = string(payload)
+		return nil
+	})
+
+	var buf bytes.Buffer
+	if err := m.Save(&buf); err != nil {
+		t.Fatalf("Save() error = %v", err)
+	}
+
+	p.SetNormalized(0.75)
+	if err := m.Load(bytes.NewReader(buf.Bytes())); err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+
+	if loadedPayload != customPayload {
+		t.Fatalf("loadedPayload = %q, want %q", loadedPayload, customPayload)
+	}
+
+	if got := p.GetNormalized(); got != 0.25 {
+		t.Fatalf("GetNormalized() after Load = %f, want 0.25", got)
 	}
 }

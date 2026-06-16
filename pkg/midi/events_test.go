@@ -118,6 +118,28 @@ func TestNoteToFrequency(t *testing.T) {
 	}
 }
 
+func TestFrequencyToNote(t *testing.T) {
+	tests := []struct {
+		frequency float64
+		expected  uint8
+	}{
+		{440.0, 69},
+		{261.63, 60},
+		{220.0, 57},
+		{880.0, 81},
+	}
+
+	for _, tt := range tests {
+		if got := FrequencyToNote(tt.frequency, 440.0); got != tt.expected {
+			t.Errorf("FrequencyToNote(%f) = %d, want %d", tt.frequency, got, tt.expected)
+		}
+	}
+
+	if got := FrequencyToNote(0, 440.0); got != 0 {
+		t.Fatalf("FrequencyToNote(0) = %d, want 0", got)
+	}
+}
+
 func TestNoteNumberToName(t *testing.T) {
 	tests := []struct {
 		note uint8

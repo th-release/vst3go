@@ -29,6 +29,30 @@ function setStatus(message) {
   }
 }
 
+function updateSnapshotControl(control, normalized, plain) {
+  control.normalized = normalized;
+  control.plain = plain;
+}
+
+function updateBoundControl(binding, control, normalized, plain) {
+  if (binding.select) {
+    const selected = binding.steps > 0 ? Math.round(normalized * binding.steps) / binding.steps : normalized;
+    binding.select.value = String(selected);
+  }
+  if (binding.range) {
+    binding.range.value = String(normalized);
+  }
+  if (binding.value) {
+    binding.value.value = String(plain);
+  }
+  if (binding.readout) {
+    binding.readout.textContent = plain.toFixed(3);
+  }
+  if (binding.card) {
+    binding.card.dataset.controlState = control.readOnly ? "read-only" : "live";
+  }
+}
+
 function persistSnapshot() {
   try {
     window.localStorage.setItem(storageKey, JSON.stringify(snapshot));
@@ -63,26 +87,11 @@ function loadSavedSnapshot() {
 }
 
 function updateControl(control, normalized, plain, notifyGo) {
+  updateSnapshotControl(control, normalized, plain);
+
   const binding = controlBindings.get(control.id);
-  if (!binding) {
-    return;
-  }
-
-  control.normalized = normalized;
-  control.plain = plain;
-
-  if (binding.select) {
-    const selected = binding.steps > 0 ? Math.round(normalized * binding.steps) / binding.steps : normalized;
-    binding.select.value = String(selected);
-  }
-  if (binding.range) {
-    binding.range.value = String(normalized);
-  }
-  if (binding.value) {
-    binding.value.value = String(plain);
-  }
-  if (binding.readout) {
-    binding.readout.textContent = plain.toFixed(3);
+  if (binding) {
+    updateBoundControl(binding, control, normalized, plain);
   }
 
   if (notifyGo) {
@@ -134,8 +143,18 @@ function restoreFromLocalStorage() {
 }
 
 function renderControl(control) {
+  if (control.hidden) {
+    return null;
+  }
+
   const card = document.createElement("article");
   card.className = "card";
+  if (control.readOnly) {
+    card.classList.add("card--readonly");
+    card.dataset.controlState = "read-only";
+  } else {
+    card.dataset.controlState = "live";
+  }
   card.innerHTML = "<p class=\"card__label\">" + (control.shortName || control.name) + "</p>" +
     "<h3>" + control.name + "</h3>" +
     "<p>" + (control.unit || control.kind) + "</p>";
@@ -154,7 +173,11 @@ function renderControl(control) {
     }
     const selected = steps > 0 ? Math.round(control.normalized * steps) / steps : control.normalized;
     select.value = String(selected);
+    select.disabled = control.readOnly;
     select.addEventListener("change", () => {
+      if (control.readOnly) {
+        return;
+      }
       const normalized = Number(select.value);
       const plain = control.min + normalized * (control.max - control.min);
       updateControl(control, normalized, plain, true);
@@ -169,14 +192,19 @@ function renderControl(control) {
     range.max = "1";
     range.step = control.kind === "toggle" ? "1" : "0.001";
     range.value = String(control.normalized);
+    range.disabled = control.readOnly;
     const value = document.createElement("input");
     value.type = "number";
     value.min = String(control.min);
     value.max = String(control.max);
     value.step = control.kind === "toggle" ? "1" : "0.001";
     value.value = String(control.plain);
+    value.disabled = control.readOnly;
 
     function updateFromNormalized(normalized) {
+      if (control.readOnly) {
+        return;
+      }
       const clamped = Math.max(0, Math.min(1, normalized));
       const plain = control.min + clamped * (control.max - control.min);
       updateControl(control, clamped, plain, true);
@@ -197,11 +225,22 @@ function renderControl(control) {
 
   const readout = document.createElement("div");
   readout.className = "control__meta";
-  readout.innerHTML = "<span>" + control.kind + "</span><span>" + Number(control.plain).toFixed(3) + "</span>";
+  readout.innerHTML = "<span>" + control.kind + "</span>";
+  const valueReadout = document.createElement("span");
+  valueReadout.className = "control__value";
+  valueReadout.textContent = control.readOnly ? "locked" : Number(control.plain).toFixed(3);
+  readout.appendChild(valueReadout);
+  if (control.readOnly) {
+    const readOnlyBadge = document.createElement("span");
+    readOnlyBadge.className = "control__badge";
+    readOnlyBadge.textContent = "Read-only";
+    readout.appendChild(readOnlyBadge);
+  }
   card.appendChild(field);
   card.appendChild(readout);
 
-  controlBindings.get(control.id).readout = readout.querySelector('span:last-child');
+  controlBindings.get(control.id).card = card;
+  controlBindings.get(control.id).readout = valueReadout;
   controlIndex.set(control.id, control);
   return card;
 }
@@ -214,7 +253,13 @@ model.sections.forEach((section) => {
   wrapper.appendChild(heading);
   const grid = document.createElement("div");
   grid.className = "grid";
-  section.controls.forEach((control) => grid.appendChild(renderControl(control)));
+  section.controls.forEach((control) => {
+    controlIndex.set(control.id, control);
+    const card = renderControl(control);
+    if (card) {
+      grid.appendChild(card);
+    }
+  });
   wrapper.appendChild(grid);
   sectionsRoot.appendChild(wrapper);
 });

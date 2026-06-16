@@ -68,12 +68,12 @@
 ## Phase 3: Testing, Validation, And Performance
 
 - [ ] Expand automated coverage for retained packages.
-  - [ ] `pkg/framework/param`
-  - [ ] `pkg/framework/process`
-  - [ ] `pkg/framework/state`
-  - [ ] `pkg/midi`
-  - [ ] `pkg/plugin` where practical
-  - [ ] `pkg/vst3`
+  - [x] `pkg/framework/param`
+  - [x] `pkg/framework/process`
+  - [x] `pkg/framework/state`
+  - [x] `pkg/midi`
+  - [x] `pkg/plugin` where practical
+  - [x] `pkg/vst3`
 - [ ] Add race-detector coverage where thread-safety assumptions are non-trivial.
 - [ ] Keep allocation-sensitive paths measurable.
   - [ ] Benchmark process-context internals.
@@ -102,15 +102,15 @@
 ## Phase 5: Web-Rendered Plugin UI
 
 - [ ] Define the editor surface and render scope.
-  - [ ] Identify the current plugin UI entry points and what `createView` should expose.
-  - [ ] Decide which controls, layout blocks, and parameter bindings must be rendered first.
+  - [x] Identify the current plugin UI entry points and what `createView` should expose.
+  - [x] Decide which controls, layout blocks, and parameter bindings must be rendered first.
 - [ ] Make the editor renderable through a web-based surface.
-  - [ ] Add a web-rendered view path for the VST editor instead of a standalone site.
-  - [ ] Keep the rendered UI aligned with the current plugin design and controls.
-  - [ ] Make local editing and parameter changes visible immediately in the view.
-  - [ ] Keep an explicit editor snapshot for save/restore and future React hydration.
-  - [ ] Document how HTML, CSS, and JS build outputs plug into the editor shell.
-- [ ] Treat the web-rendered editor as the prerequisite for platform expansion work.
+  - [x] Add a web-rendered view path for the VST editor instead of a standalone site.
+  - [x] Keep the rendered UI aligned with the current plugin design and controls.
+  - [x] Make local editing and parameter changes visible immediately in the view.
+  - [x] Keep an explicit editor snapshot for save/restore and future React hydration.
+  - [x] Document how HTML, CSS, and JS build outputs plug into the editor shell.
+- [x] Treat the web-rendered editor as the prerequisite for platform expansion work.
 
 ## Phase 6: Cross-Platform Windows Support
 
@@ -136,12 +136,12 @@
 
 ## Phase 7: Release Readiness
 
-- [ ] Keep architectural guardrails enforced.
-- [ ] Keep retained runtime packages tested and documented.
-- [ ] Confirm the public API boundary is stable enough for downstream repos.
-- [ ] Decide supported release scope explicitly.
-  - [ ] Linux/macOS only, or include Windows.
-  - [ ] Runtime-only, with higher-level features delegated to companion repos.
+- [x] Keep architectural guardrails enforced.
+- [x] Keep retained runtime packages tested and documented.
+- [x] Confirm the public API boundary is stable enough for downstream repos.
+- [x] Decide supported release scope explicitly.
+  - [x] Linux/macOS only, or include Windows.
+  - [x] Runtime-only, with higher-level features delegated to companion repos.
 
 ## Ongoing Rules
 

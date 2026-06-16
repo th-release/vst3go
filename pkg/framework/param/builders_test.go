@@ -113,6 +113,21 @@ func TestMixParameter(t *testing.T) {
 	}
 }
 
+func TestBuilderVisibilityAndReadOnlyFlags(t *testing.T) {
+	hidden := New(800, "Hidden").Hidden().Build()
+	if hidden.Flags&IsHidden == 0 {
+		t.Fatal("Hidden builder should set IsHidden")
+	}
+
+	readOnly := New(801, "Meter").ReadOnly().Build()
+	if readOnly.Flags&IsReadOnly == 0 {
+		t.Fatal("ReadOnly builder should set IsReadOnly")
+	}
+	if readOnly.Flags&CanAutomate != 0 {
+		t.Fatal("ReadOnly builder should clear CanAutomate")
+	}
+}
+
 func TestFrequencyParameter(t *testing.T) {
 	param := FrequencyParameter(400, "Cutoff", 20, 20000, 1000).Build()
 

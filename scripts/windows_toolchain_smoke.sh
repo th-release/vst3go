@@ -25,6 +25,27 @@ if [[ "${1:-}" == "env" && "${2:-}" == "GOHOSTOS" ]]; then
   exit 0
 fi
 
+if [[ "${1:-}" == "build" ]]; then
+  args=("$@")
+  output_file=""
+  for ((index = 0; index < ${#args[@]}; index++)); do
+    if [[ "${args[index]}" == "-o" && $((index + 1)) -lt ${#args[@]} ]]; then
+      output_file="${args[index + 1]}"
+      break
+    fi
+  done
+
+  if [[ -z "$output_file" ]]; then
+    echo "missing build output path" >&2
+    exit 1
+  fi
+
+  mkdir -p "$(dirname "$output_file")"
+  : > "$output_file"
+  : > "${output_file}.h"
+  exit 0
+fi
+
 echo "unexpected go invocation: $*" >&2
 exit 1
 EOF
@@ -109,17 +130,31 @@ fi
 
 PATH="$success_bin" bash "$repo_root/scripts/preflight_windows_vst3.sh" >/dev/null
 
-package_input_dir="$tmpdir/package-input"
 package_output_dir="$tmpdir/package-output"
-mkdir -p "$package_input_dir" "$package_output_dir"
+PATH="$success_bin" bash "$repo_root/scripts/build_windows_vst3.sh" "$package_output_dir" >/dev/null
+bash "$repo_root/scripts/check_windows_vst3.sh" "$package_output_dir" >/dev/null
+
+if [[ ! -f "$package_output_dir/vst3go.vst3/Contents/x86_64-win/vst3go.vst3" ]]; then
+  echo "builder did not create the Windows DLL output" >&2
+  exit 1
+fi
+
+if [[ ! -f "$package_output_dir/vst3go.vst3/Contents/x86_64-win/vst3go.vst3.h" ]]; then
+  echo "builder did not create the Windows header sidecar" >&2
+  exit 1
+fi
+
+package_input_dir="$tmpdir/package-input"
+package_output_copy="$tmpdir/package-output-copy"
+mkdir -p "$package_input_dir" "$package_output_copy"
 printf 'fake dll\n' > "$package_input_dir/vst3go.vst3"
 printf 'fake header\n' > "$package_input_dir/vst3go.h"
 printf 'fake loader\n' > "$package_input_dir/WebView2Loader.dll"
 
-bash "$repo_root/scripts/package_windows_vst3.sh" "$package_input_dir/vst3go.vst3" "$package_output_dir" >/dev/null
-bash "$repo_root/scripts/check_windows_vst3.sh" "$package_output_dir" >/dev/null
+bash "$repo_root/scripts/package_windows_vst3.sh" "$package_input_dir/vst3go.vst3" "$package_output_copy" >/dev/null
+bash "$repo_root/scripts/check_windows_vst3.sh" "$package_output_copy" >/dev/null
 
-if [[ ! -f "$package_output_dir/vst3go.vst3/Contents/x86_64-win/WebView2Loader.dll" ]]; then
+if [[ ! -f "$package_output_copy/vst3go.vst3/Contents/x86_64-win/WebView2Loader.dll" ]]; then
   echo "packager did not copy the WebView2 loader when present" >&2
   exit 1
 fi

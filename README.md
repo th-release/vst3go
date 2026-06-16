@@ -39,6 +39,12 @@ The companion `synthkit` repo owns:
 - `pkg/framework/voice`
 - `examples/`
 
+## Public API Boundary
+
+- Downstream code should treat `pkg/plugin`, `pkg/vst3`, `pkg/midi`, and the retained `pkg/framework/*` packages as the supported API surface.
+- `bridge/` and the editor assets exist to support that API surface, but product-specific DSP and showcase logic stay out of this repo.
+- If a feature needs higher-level audio product behavior, it belongs in `synthkit` or the consumer project instead of this runtime layer.
+
 ## Companion Repo
 
 Recommended name: `synthkit`
@@ -65,6 +71,12 @@ just test
 - Platform-specific integration checks, host app behavior, and downstream DSP/plugin wiring belong in the companion `synthkit` repository or the consumer project.
 - Windows packaging and bundle layout checks in this repo stay focused on the generated DLL, header sidecar, and layout contract.
 
+## Release Scope
+
+- This repo ships the VST3 binding/runtime layer, the web-rendered editor shell, and the Windows bundle/build harness that supports that shell.
+- This repo does not ship the higher-level DSP, showcase, or product-specific synth logic; those remain in `synthkit`.
+- Release validation for this repo is centered on `just test`, `just windows-smoke`, and the documented bundle/layout checks.
+
 Windows-specific editor and packaging notes:
 
 - `bridge/windows_dll.c` provides the DLL entry point.
@@ -73,7 +85,7 @@ Windows-specific editor and packaging notes:
 - `pkg/plugin/editor_view_windows.c` expects WebView2 headers and loader support.
 - Windows support currently targets `amd64` and the `x86_64-win` bundle layout.
 - `just windows-preflight` auto-selects a compatible Windows compiler when needed and checks for `windows.h`, `WebView2.h`, and `WebView2Loader`. If no compiler works, it reports the candidates it tried and why each one failed.
-- `just windows-smoke` runs a local script-only smoke test that exercises selection, preflight, packaging, and bundle validation without a real Windows host.
+- `just windows-smoke` runs a local script-only smoke test that exercises selection, preflight, build, packaging, and bundle validation without a real Windows host.
 - `just windows-build-dll` builds the Windows shared library when the Windows toolchain is available.
 - `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL and requires the generated header sidecar.
 - `just windows-check-bundle` validates the resulting bundle layout.
