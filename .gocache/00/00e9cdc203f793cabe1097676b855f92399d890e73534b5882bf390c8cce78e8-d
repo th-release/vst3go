@@ -1,6 +1,0 @@
-./builder.go
-./bus.go
-./templates.go
-./builder_test.go
-./bus_test.go
-./templates_test.go

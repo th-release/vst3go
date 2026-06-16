@@ -1,4 +1,0 @@
-./events.go
-./queue.go
-./events_test.go
-./queue_test.go
