@@ -7,7 +7,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - A Windows CGO toolchain
 - The Microsoft WebView2 SDK headers and loader library
 - The WebView2 runtime installed on the target machine
-- On non-Windows hosts, the build script preflights the compiler by checking that it can preprocess `<windows.h>`.
+- On non-Windows hosts, the build script preflights the compiler by checking that it can preprocess `<windows.h>` and `<WebView2.h>`.
 
 ## Current Contract
 
@@ -41,3 +41,4 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - Scheduler and message-loop timing can make WebView2 focus or resize bugs look intermittent.
 - File locking is often stricter on Windows, so generated DLLs may need a clean rebuild before repackaging.
 - Path-length edge cases are still worth checking in real plugin install locations.
+- The WebView2 host uses a process-scoped temp user-data folder to reduce reload and profile-lock friction.

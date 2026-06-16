@@ -27,6 +27,7 @@ struct VST3GoEditorView {
     EditorMessageHandler* messageHandler;
     EventRegistrationToken messageToken;
     BOOL hasMessageToken;
+    WCHAR* userDataFolder;
     Steinberg_IPlugFrame* frame;
     Steinberg_ViewRect size;
     BOOL attached;
@@ -149,6 +150,35 @@ static WCHAR* editorViewUtf8ToWide(const char* utf8) {
     return wide;
 }
 
+static WCHAR* editorViewCreateUserDataFolder(void) {
+    WCHAR tempPath[MAX_PATH];
+    DWORD tempLength = GetTempPathW(MAX_PATH, tempPath);
+    if (tempLength == 0 || tempLength >= MAX_PATH) {
+        return NULL;
+    }
+
+    size_t required = wcslen(tempPath) + 32;
+    WCHAR* folder = (WCHAR*)calloc(required, sizeof(WCHAR));
+    if (!folder) {
+        return NULL;
+    }
+
+    if (swprintf(folder, required, L"%lsVST3Go-WebView2-%lu", tempPath, (unsigned long)GetCurrentProcessId()) < 0) {
+        free(folder);
+        return NULL;
+    }
+
+    if (!CreateDirectoryW(folder, NULL)) {
+        DWORD error = GetLastError();
+        if (error != ERROR_ALREADY_EXISTS) {
+            free(folder);
+            return NULL;
+        }
+    }
+
+    return folder;
+}
+
 static void editorViewReleaseWebView(VST3GoEditorView* view) {
     if (!view) {
         return;
@@ -187,6 +217,11 @@ static void editorViewReleaseWebView(VST3GoEditorView* view) {
     if (view->environmentHandler) {
         view->environmentHandler->iface.lpVtbl->Release(&view->environmentHandler->iface);
         view->environmentHandler = NULL;
+    }
+
+    if (view->userDataFolder) {
+        free(view->userDataFolder);
+        view->userDataFolder = NULL;
     }
 }
 
@@ -385,6 +420,7 @@ static Steinberg_tresult editorView_attached(void* thisInterface, void* parent, 
 
     view->parentWindow = (HWND)parent;
     view->attached = TRUE;
+    view->userDataFolder = editorViewCreateUserDataFolder();
     view->environmentHandler = editorViewCreateEnvironmentHandler(view);
     view->controllerHandler = editorViewCreateControllerHandler(view);
     if (!view->environmentHandler || !view->controllerHandler) {
@@ -392,7 +428,7 @@ static Steinberg_tresult editorView_attached(void* thisInterface, void* parent, 
         return Steinberg_kResultFalse;
     }
 
-    HRESULT result = CreateCoreWebView2EnvironmentWithOptions(NULL, NULL, NULL, &view->environmentHandler->iface);
+    HRESULT result = CreateCoreWebView2EnvironmentWithOptions(NULL, view->userDataFolder, NULL, &view->environmentHandler->iface);
     return SUCCEEDED(result) ? Steinberg_kResultOk : Steinberg_kResultFalse;
 }
 
