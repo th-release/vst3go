@@ -15,6 +15,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - `pkg/plugin/editor_view_windows.c` hosts the editor through WebView2.
 - `pkg/plugin/windows_bundle.go` defines the canonical bundle path layout.
 - `pkg/plugin/editor_assets/` provides the HTML/CSS/JS snapshot shell.
+- `cmd/vst3go-dll/main_windows.go` is the `c-shared` entrypoint scaffold for building a Windows DLL.
 
 ## Expected Bundle Shape
 
@@ -23,6 +24,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - The editor bridge should stay inside the plugin DLL; the web assets remain embedded in the binary.
 - The repo ships `scripts/package_windows_vst3.sh`, `just windows-package`, and `just windows-build` to assemble the bundle from an already-built Windows DLL.
 - The repo also ships `scripts/check_windows_vst3.sh` and `just windows-check-bundle` to validate the resulting layout.
+- The repo also ships `scripts/build_windows_vst3.sh` and `just windows-build-dll` to build the DLL when a Windows toolchain is available.
 
 ## Build Expectations
 

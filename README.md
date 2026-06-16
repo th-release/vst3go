@@ -64,6 +64,7 @@ Windows-specific editor and packaging notes:
 - `bridge/windows_dll.c` provides the DLL entry point.
 - `bridge/bridge.c` exports `GetPluginFactory` for the Windows build.
 - `pkg/plugin/editor_view_windows.c` expects WebView2 headers and loader support.
+- `just windows-build-dll` builds the Windows shared library when the Windows toolchain is available.
 - `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL.
 - `just windows-check-bundle` validates the resulting bundle layout.
 - `docs/windows-build.md` describes the expected bundle shape.
