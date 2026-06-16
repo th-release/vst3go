@@ -36,18 +36,18 @@
 
 ## Phase 1: Runtime API Cleanup
 
-- [ ] Resolve naming inconsistencies.
+- [x] Resolve naming inconsistencies.
   - [x] Eliminate duplicate constant spellings and casing variants by making `ResultOK` canonical and keeping aliases compatibility-only.
   - [x] Standardize normalized/plain parameter naming semantics by adding explicit `GetNormalized`/`SetNormalized` and `GetPlain`/`SetPlain` accessors.
   - [x] Standardize canonical bus configuration entry points by adding primary constructors such as `Stereo`, `Mono`, `EffectStereo`, `Generator`, and `MIDIEffect`.
-- [ ] Clarify interface hierarchy.
+- [x] Clarify interface hierarchy.
   - [x] Document the relationships between plugin, processor, and optional stateful processor behavior in code comments.
   - [x] Keep optional interfaces explicit rather than implicit.
-- [ ] Tighten parameter and registry APIs.
+- [x] Tighten parameter and registry APIs.
   - [x] Audit and clean up the obvious unsafe parameter access patterns in retained runtime code.
   - [x] Prefer checked access where nil is possible by adding safe registry helpers such as `GetOK`, `Has`, `GetNormalized`, and `GetPlain`.
   - [x] Clarify duplicate-registration behavior and failure modes by making `Registry.Add` fail explicitly on duplicate IDs.
-- [ ] Tighten error handling.
+- [x] Tighten error handling.
   - [x] Replace silent failures where normal error returns are appropriate in the state/registry layer.
   - [x] Wrap errors with useful context in state save/load and core runtime setup paths.
 
@@ -67,17 +67,17 @@
 
 ## Phase 3: Testing, Validation, And Performance
 
-- [ ] Expand automated coverage for retained packages.
+- [x] Expand automated coverage for retained packages.
   - [x] `pkg/framework/param`
   - [x] `pkg/framework/process`
   - [x] `pkg/framework/state`
   - [x] `pkg/midi`
   - [x] `pkg/plugin` where practical
   - [x] `pkg/vst3`
-- [ ] Add race-detector coverage where thread-safety assumptions are non-trivial.
+- [x] Add race-detector coverage where thread-safety assumptions are non-trivial.
 - [ ] Keep allocation-sensitive paths measurable.
-  - [ ] Benchmark process-context internals.
-  - [ ] Benchmark runtime hot paths where useful.
+  - [x] Benchmark process-context internals.
+  - [x] Benchmark runtime hot paths where useful.
   - [ ] Revisit fixed-size internal buffers where limits may be too rigid.
 - [x] Keep validation expectations explicit.
   - [x] Define minimal validation expectations for the runtime layer itself.
@@ -85,26 +85,26 @@
 
 ## Phase 4: Documentation And Consumer Experience
 
-- [ ] Document retained scope clearly.
+- [x] Document retained scope clearly.
   - [x] State the split boundary in README and PLAN.
   - [x] Add a concise “what belongs here vs. in `synthkit`” section if the README still needs tightening.
-- [ ] Improve API documentation.
-  - [ ] package-level docs
-  - [ ] lifecycle expectations
-  - [ ] thread-safety guarantees
-  - [ ] state/persistence expectations
-- [ ] Add migration guidance for the fork.
+- [x] Improve API documentation.
+  - [x] package-level docs
+  - [x] lifecycle expectations
+  - [x] thread-safety guarantees
+  - [x] state/persistence expectations
+- [x] Add migration guidance for the fork.
   - [x] Clarify intentional differences from the original project.
   - [x] Clarify the new module path.
-  - [ ] Document how downstream repos should consume this fork once versions are tagged.
-- [ ] Keep build and validation instructions accurate for the retained runtime repo.
+  - [x] Document how downstream repos should consume this fork once versions are tagged.
+- [x] Keep build and validation instructions accurate for the retained runtime repo.
 
 ## Phase 5: Web-Rendered Plugin UI
 
-- [ ] Define the editor surface and render scope.
+- [x] Define the editor surface and render scope.
   - [x] Identify the current plugin UI entry points and what `createView` should expose.
   - [x] Decide which controls, layout blocks, and parameter bindings must be rendered first.
-- [ ] Make the editor renderable through a web-based surface.
+- [x] Make the editor renderable through a web-based surface.
   - [x] Add a web-rendered view path for the VST editor instead of a standalone site.
   - [x] Keep the rendered UI aligned with the current plugin design and controls.
   - [x] Make local editing and parameter changes visible immediately in the view.

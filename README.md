@@ -15,6 +15,7 @@ The higher-level audio and synth layer now lives in the companion `synthkit` rep
 
 For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
+For lifecycle, thread-safety, and persistence expectations, see [`docs/runtime-contracts.md`](docs/runtime-contracts.md).
 
 ## Scope
 
@@ -44,6 +45,12 @@ The companion `synthkit` repo owns:
 - Downstream code should treat `pkg/plugin`, `pkg/vst3`, `pkg/midi`, and the retained `pkg/framework/*` packages as the supported API surface.
 - `bridge/` and the editor assets exist to support that API surface, but product-specific DSP and showcase logic stay out of this repo.
 - If a feature needs higher-level audio product behavior, it belongs in `synthkit` or the consumer project instead of this runtime layer.
+
+## Consumption
+
+- Downstream repos should import `github.com/cwbudde/vst3go` and build on the supported package surface rather than reaching into bridge internals.
+- Once versions are tagged, consumers should pin a tag instead of a moving branch so bridge/runtime changes can be upgraded intentionally.
+- DAW validation, signing, installers, and product-specific DSP behavior remain downstream responsibilities.
 
 ## Companion Repo
 
