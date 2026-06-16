@@ -17,7 +17,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - `pkg/plugin/editor_view_windows.c` hosts the editor through WebView2.
 - `pkg/plugin/windows_bundle.go` defines the canonical bundle path layout, including the generated header sidecar.
 - `pkg/plugin/editor_assets/` provides the HTML/CSS/JS snapshot shell.
-- `cmd/vst3go-dll/main_windows.go` is the `c-shared` entrypoint scaffold for building a Windows DLL.
+- `cmd/vst3go-dll/main_windows.go` is the `c-shared` entrypoint scaffold for building a Windows DLL on `amd64`.
 
 ## Expected Bundle Shape
 
@@ -32,6 +32,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 ## Build Expectations
 
 - Cross-compiling from Linux is possible only when the Windows C toolchain and WebView2 headers are available.
+- Current Windows packaging targets `amd64` and the `x86_64-win` bundle layout.
 - The repo-level Go tests continue to validate the shared runtime code on the current platform.
 - Windows-specific packaging validation should happen on an actual Windows toolchain.
 
