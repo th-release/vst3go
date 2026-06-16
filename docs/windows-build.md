@@ -34,3 +34,10 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - Cross-compiling from Linux is possible only when the Windows C toolchain and WebView2 headers are available.
 - The repo-level Go tests continue to validate the shared runtime code on the current platform.
 - Windows-specific packaging validation should happen on an actual Windows toolchain.
+
+## Windows Risks
+
+- Shared-library loading behavior can vary across hosts, especially when the plugin is reloaded repeatedly.
+- Scheduler and message-loop timing can make WebView2 focus or resize bugs look intermittent.
+- File locking is often stricter on Windows, so generated DLLs may need a clean rebuild before repackaging.
+- Path-length edge cases are still worth checking in real plugin install locations.
