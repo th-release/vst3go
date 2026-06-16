@@ -66,7 +66,7 @@ Windows-specific editor and packaging notes:
 - `pkg/plugin/cbridge/windows_dll_windows.go` makes the DLL entry source part of the Windows cgo build.
 - `pkg/plugin/editor_view_windows.c` expects WebView2 headers and loader support.
 - `just windows-build-dll` builds the Windows shared library when the Windows toolchain is available.
-- `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL.
+- `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL and keeps the generated header sidecar when available.
 - `just windows-check-bundle` validates the resulting bundle layout.
 - `just windows-release` runs build plus validation in one go.
 - `docs/windows-build.md` describes the expected bundle shape.
