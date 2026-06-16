@@ -19,6 +19,8 @@ When you switch to a React build, keep the same data contract:
 - The build output should replace the inline UI shell, not the data contract.
 - CSS can remain external or be inlined by the build pipeline.
 - JS should still receive the initial snapshot from Go, then hydrate the controls from that data.
+- Parameter change messages should keep the same shape across platforms: `{ type: "param-change", id, normalized, plain }`.
+- Native hosts should treat `normalized` as the canonical value and use `plain` only as a rendered companion value.
 
 Recommended build layout for a React editor:
 

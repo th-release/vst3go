@@ -229,8 +229,8 @@ static BOOL editorViewLoadHtml(VST3GoEditorView* view) {
     return SUCCEEDED(result);
 }
 
-static BOOL editorViewParseParameterMessage(const wchar_t* message, Steinberg_Vst_ParamID* id, Steinberg_Vst_ParamValue* value) {
-    if (!message || !id || !value) {
+static BOOL editorViewParseParameterMessage(const wchar_t* message, Steinberg_Vst_ParamID* id, Steinberg_Vst_ParamValue* normalized, Steinberg_Vst_ParamValue* plain) {
+    if (!message || !id || !normalized) {
         return FALSE;
     }
 
@@ -239,13 +239,27 @@ static BOOL editorViewParseParameterMessage(const wchar_t* message, Steinberg_Vs
     }
 
     const wchar_t* idField = wcsstr(message, L"\"id\":");
-    const wchar_t* valueField = wcsstr(message, L"\"value\":");
-    if (!idField || !valueField) {
+    const wchar_t* normalizedField = wcsstr(message, L"\"normalized\":");
+    if (!normalizedField) {
+        normalizedField = wcsstr(message, L"\"value\":");
+    }
+
+    if (!idField || !normalizedField) {
         return FALSE;
     }
 
     *id = (Steinberg_Vst_ParamID)wcstoul(idField + 5, NULL, 10);
-    *value = (Steinberg_Vst_ParamValue)wcstod(valueField + 8, NULL);
+    *normalized = (Steinberg_Vst_ParamValue)wcstod(normalizedField + (normalizedField[1] == L'n' ? 13 : 8), NULL);
+
+    if (plain) {
+        const wchar_t* plainField = wcsstr(message, L"\"plain\":");
+        if (plainField) {
+            *plain = (Steinberg_Vst_ParamValue)wcstod(plainField + 8, NULL);
+        } else {
+            *plain = *normalized;
+        }
+    }
+
     return TRUE;
 }
 
@@ -633,7 +647,9 @@ static HRESULT STDMETHODCALLTYPE editorMessageHandler_Invoke(ICoreWebView2WebMes
 
     Steinberg_Vst_ParamID id = 0;
     Steinberg_Vst_ParamValue normalized = 0;
-    if (editorViewParseParameterMessage(message, &id, &normalized)) {
+    Steinberg_Vst_ParamValue plain = 0;
+    if (editorViewParseParameterMessage(message, &id, &normalized, &plain)) {
+        (void)plain;
         GoEditControllerSetParamNormalizedWithNotification(view->component, id, normalized);
     }
 
