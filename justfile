@@ -36,6 +36,9 @@ windows-check-bundle bundle_root='dist/windows' plugin_name='vst3go':
 windows-build-dll bundle_root='dist/windows' plugin_name='vst3go':
   bash scripts/build_windows_vst3.sh "{{bundle_root}}" "{{plugin_name}}"
 
+windows-preflight:
+  bash scripts/preflight_windows_vst3.sh
+
 windows-release bundle_root='dist/windows' plugin_name='vst3go':
   just windows-build-dll "{{bundle_root}}" "{{plugin_name}}"
   just windows-check-bundle "{{bundle_root}}" "{{plugin_name}}"
