@@ -9,6 +9,7 @@ type WindowsBundleLayout struct {
 	ContentsDir string
 	BinaryDir   string
 	BinaryPath  string
+	HeaderPath  string
 	LoaderPath  string
 }
 
@@ -30,6 +31,7 @@ func WindowsBundlePaths(bundleRoot, pluginName string) WindowsBundleLayout {
 		ContentsDir: contentsDir,
 		BinaryDir:   binaryDir,
 		BinaryPath:  filepath.Join(binaryDir, pluginName+".vst3"),
+		HeaderPath:  filepath.Join(binaryDir, pluginName+".h"),
 		LoaderPath:  filepath.Join(binaryDir, "WebView2Loader.dll"),
 	}
 }

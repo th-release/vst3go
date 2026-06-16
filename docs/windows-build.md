@@ -7,13 +7,15 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 - A Windows CGO toolchain
 - The Microsoft WebView2 SDK headers and loader library
 - The WebView2 runtime installed on the target machine
+- On non-Windows hosts, the build script preflights the compiler by checking that it can preprocess `<windows.h>`.
 
 ## Current Contract
 
 - `bridge/windows_dll.c` provides a minimal `DllMain`.
 - `bridge/bridge.c` exports `GetPluginFactory` with a Windows-friendly symbol annotation.
+- `pkg/plugin/cbridge/windows_dll_windows.go` pulls the DLL entry source into the Windows cgo build.
 - `pkg/plugin/editor_view_windows.c` hosts the editor through WebView2.
-- `pkg/plugin/windows_bundle.go` defines the canonical bundle path layout.
+- `pkg/plugin/windows_bundle.go` defines the canonical bundle path layout, including the generated header sidecar.
 - `pkg/plugin/editor_assets/` provides the HTML/CSS/JS snapshot shell.
 - `cmd/vst3go-dll/main_windows.go` is the `c-shared` entrypoint scaffold for building a Windows DLL.
 
