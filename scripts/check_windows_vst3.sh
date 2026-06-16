@@ -8,6 +8,12 @@ fi
 
 bundle_root="$1"
 plugin_name="${2:-vst3go}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "${script_dir}/.." && pwd)"
+
+if [[ "$bundle_root" != /* ]]; then
+  bundle_root="${repo_root}/${bundle_root}"
+fi
 
 layout_bundle="${bundle_root}/${plugin_name}.vst3"
 layout_binary="${layout_bundle}/Contents/x86_64-win/${plugin_name}.vst3"

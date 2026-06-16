@@ -150,20 +150,20 @@ static WCHAR* editorViewUtf8ToWide(const char* utf8) {
     return wide;
 }
 
-static WCHAR* editorViewCreateUserDataFolder(void) {
+static WCHAR* editorViewCreateUserDataFolder(VST3GoEditorView* view) {
     WCHAR tempPath[MAX_PATH];
     DWORD tempLength = GetTempPathW(MAX_PATH, tempPath);
     if (tempLength == 0 || tempLength >= MAX_PATH) {
         return NULL;
     }
 
-    size_t required = wcslen(tempPath) + 32;
+    size_t required = wcslen(tempPath) + 64;
     WCHAR* folder = (WCHAR*)calloc(required, sizeof(WCHAR));
     if (!folder) {
         return NULL;
     }
 
-    if (swprintf(folder, required, L"%lsVST3Go-WebView2-%lu", tempPath, (unsigned long)GetCurrentProcessId()) < 0) {
+    if (swprintf(folder, required, L"%lsVST3Go-WebView2-%lu-%p", tempPath, (unsigned long)GetCurrentProcessId(), (void*)view) < 0) {
         free(folder);
         return NULL;
     }
@@ -263,6 +263,23 @@ static BOOL editorViewLoadHtml(VST3GoEditorView* view) {
     HRESULT result = view->webView->lpVtbl->NavigateToString(view->webView, wideHtml);
     free(wideHtml);
     return SUCCEEDED(result);
+}
+
+static void editorViewConfigureWebView(VST3GoEditorView* view) {
+    if (!view || !view->webView) {
+        return;
+    }
+
+    ICoreWebView2Settings* settings = NULL;
+    HRESULT result = view->webView->lpVtbl->get_Settings(view->webView, &settings);
+    if (FAILED(result) || !settings) {
+        return;
+    }
+
+    settings->lpVtbl->put_AreDefaultContextMenusEnabled(settings, FALSE);
+    settings->lpVtbl->put_AreDevToolsEnabled(settings, FALSE);
+    settings->lpVtbl->put_IsStatusBarEnabled(settings, FALSE);
+    settings->lpVtbl->Release(settings);
 }
 
 static BOOL editorViewParseParameterMessage(const wchar_t* message, Steinberg_Vst_ParamID* id, Steinberg_Vst_ParamValue* normalized, Steinberg_Vst_ParamValue* plain) {
@@ -421,7 +438,7 @@ static Steinberg_tresult editorView_attached(void* thisInterface, void* parent, 
 
     view->parentWindow = (HWND)parent;
     view->attached = TRUE;
-    view->userDataFolder = editorViewCreateUserDataFolder();
+    view->userDataFolder = editorViewCreateUserDataFolder(view);
     view->environmentHandler = editorViewCreateEnvironmentHandler(view);
     view->controllerHandler = editorViewCreateControllerHandler(view);
     if (!view->environmentHandler || !view->controllerHandler) {
@@ -620,6 +637,8 @@ static HRESULT STDMETHODCALLTYPE editorControllerHandler_Invoke(ICoreWebView2Cre
     if (FAILED(webViewResult) || !view->webView) {
         return webViewResult;
     }
+
+    editorViewConfigureWebView(view);
 
     view->messageHandler = editorViewCreateMessageHandler(view);
     if (!view->messageHandler) {

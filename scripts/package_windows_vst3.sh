@@ -9,6 +9,12 @@ fi
 plugin_dll="$1"
 bundle_root="${2:-dist/windows}"
 plugin_name="${3:-vst3go}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "${script_dir}/.." && pwd)"
+
+if [[ "$bundle_root" != /* ]]; then
+  bundle_root="${repo_root}/${bundle_root}"
+fi
 
 if [[ ! -f "$plugin_dll" ]]; then
   echo "plugin DLL not found: $plugin_dll" >&2
