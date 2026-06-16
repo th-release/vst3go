@@ -2,6 +2,8 @@
 
 This document is the handoff checklist for real Windows validation. The repository already covers shared runtime correctness with Go tests and script-level Windows smoke coverage on non-Windows hosts. The remaining work is confirming that the actual Windows toolchain, bundle, and WebView2-backed editor behave correctly on a real Windows machine.
 
+For a ready-to-fill execution record, use `docs/windows-validation-report-template.md`.
+
 ## Validation Goals
 
 - prove that `just windows-preflight` selects or accepts a usable Windows CGO compiler
