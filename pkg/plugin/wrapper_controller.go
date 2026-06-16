@@ -249,22 +249,22 @@ func GoEditControllerGetEditorHTML(componentPtr unsafe.Pointer) *C.char {
 		return nil
 	}
 
-	model, err := wrapper.component.EditorModel()
+	snapshot, err := wrapper.component.EditorSnapshot()
 	if err != nil {
 		return nil
 	}
 
-	modelJSON, err := json.Marshal(model)
+	snapshotJSON, err := json.Marshal(snapshot)
 	if err != nil {
 		return nil
 	}
 
-	encoded := base64.StdEncoding.EncodeToString(modelJSON)
+	encoded := base64.StdEncoding.EncodeToString(snapshotJSON)
 	html := buildEditorHTML(encoded)
 	return C.CString(html)
 }
 
-func buildEditorHTML(encodedModel string) string {
+func buildEditorHTML(encodedSnapshot string) string {
 	return fmt.Sprintf(`<!doctype html>
 <html lang="en">
 <head>
@@ -290,6 +290,9 @@ func buildEditorHTML(encodedModel string) string {
     input[type=range] { width: 100%%; }
     input[type=number], select { width: 100%%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: #0f172a; color: var(--text); }
     .pill { display: inline-flex; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+    .editor-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .editor-actions button { border: 1px solid var(--border); background: #0f172a; color: var(--text); border-radius: 10px; padding: 9px 12px; cursor: pointer; }
+    .editor-actions button:disabled { cursor: not-allowed; opacity: 0.55; }
   </style>
 </head>
 <body>
@@ -300,15 +303,24 @@ func buildEditorHTML(encodedModel string) string {
         <h1 id="plugin-name">Plugin Editor</h1>
         <p class="lede" id="plugin-meta">Loading editor model…</p>
       </div>
-      <div class="pill">Web-rendered editor</div>
+      <div class="editor-actions">
+        <div class="pill" id="snapshot-status">Live snapshot</div>
+        <button id="save-snapshot" type="button">Save snapshot</button>
+        <button id="restore-snapshot" type="button">Restore snapshot</button>
+      </div>
     </header>
     <section class="section">
       <div class="grid" id="sections"></div>
     </section>
   </div>
   <script>
-    const model = JSON.parse(atob("%s"));
+    const snapshot = JSON.parse(atob("%s"));
+    const model = snapshot.model;
     const sectionsRoot = document.getElementById("sections");
+    const statusText = document.getElementById("snapshot-status");
+    const saveButton = document.getElementById("save-snapshot");
+    const restoreButton = document.getElementById("restore-snapshot");
+    const storageKey = "vst3go.editor.snapshot." + (model.plugin.id || "default");
     document.getElementById("plugin-vendor").textContent = model.plugin.vendor || "VST3Go";
     document.getElementById("plugin-name").textContent = model.plugin.name || "Plugin Editor";
     document.getElementById("plugin-meta").textContent = [model.plugin.category, model.plugin.version].filter(Boolean).join(" · ");
@@ -320,9 +332,56 @@ func buildEditorHTML(encodedModel string) string {
     }
 
     const controlBindings = new Map();
-    window.__vst3goUpdateParameter = function(id, normalized, plain) {
-      const binding = controlBindings.get(id);
-      if (!binding) return;
+    const controlIndex = new Map();
+
+    function setStatus(message) {
+      if (statusText) {
+        statusText.textContent = message;
+      }
+    }
+
+    function persistSnapshot() {
+      try {
+        window.localStorage.setItem(storageKey, JSON.stringify(snapshot));
+        if (restoreButton) {
+          restoreButton.disabled = false;
+        }
+        setStatus("Snapshot saved locally");
+      } catch (error) {
+        setStatus("Snapshot save failed");
+      }
+    }
+
+    function loadSavedSnapshot() {
+      try {
+        const saved = window.localStorage.getItem(storageKey);
+        if (!saved) {
+          setStatus("No saved snapshot yet");
+          return null;
+        }
+
+        const parsed = JSON.parse(saved);
+        if (!parsed || !parsed.model || !Array.isArray(parsed.model.sections)) {
+          setStatus("Saved snapshot is invalid");
+          return null;
+        }
+
+        return parsed;
+      } catch (error) {
+        setStatus("Snapshot restore failed");
+        return null;
+      }
+    }
+
+    function updateControl(control, normalized, plain, notifyGo) {
+      const binding = controlBindings.get(control.id);
+      if (!binding) {
+        return;
+      }
+
+      control.normalized = normalized;
+      control.plain = plain;
+
       if (binding.select) {
         const selected = binding.steps > 0 ? Math.round(normalized * binding.steps) / binding.steps : normalized;
         binding.select.value = String(selected);
@@ -336,7 +395,54 @@ func buildEditorHTML(encodedModel string) string {
       if (binding.readout) {
         binding.readout.textContent = plain.toFixed(3);
       }
+
+      if (notifyGo) {
+        sendChange(control.id, normalized);
+      }
+    }
+
+    function findControl(controlId) {
+      return controlIndex.get(controlId) || null;
+    }
+
+    function applySnapshot(nextSnapshot, notifyGo) {
+      if (!nextSnapshot || !nextSnapshot.model || !Array.isArray(nextSnapshot.model.sections)) {
+        return false;
+      }
+
+      nextSnapshot.model.sections.forEach((section) => {
+        section.controls.forEach((control) => {
+          const existing = findControl(control.id);
+          if (!existing) {
+            return;
+          }
+
+          updateControl(existing, control.normalized, control.plain, notifyGo);
+        });
+      });
+
+      setStatus(notifyGo ? "Snapshot restored" : "Snapshot loaded");
+      return true;
+    }
+
+    window.__vst3goUpdateParameter = function(id, normalized, plain) {
+      const control = findControl(id);
+      if (!control) {
+        return;
+      }
+
+      updateControl(control, normalized, plain, false);
+      persistSnapshot();
     };
+
+    function restoreFromLocalStorage() {
+      const saved = loadSavedSnapshot();
+      if (!saved) {
+        return;
+      }
+
+      applySnapshot(saved, true);
+    }
 
     function renderControl(control) {
       const card = document.createElement("article");
@@ -359,7 +465,12 @@ func buildEditorHTML(encodedModel string) string {
         }
         const selected = steps > 0 ? Math.round(control.normalized * steps) / steps : control.normalized;
         select.value = String(selected);
-        select.addEventListener("change", () => sendChange(control.id, Number(select.value)));
+        select.addEventListener("change", () => {
+          const normalized = Number(select.value);
+          const plain = control.min + normalized * (control.max - control.min);
+          updateControl(control, normalized, plain, true);
+          persistSnapshot();
+        });
         field.appendChild(select);
         controlBindings.set(control.id, { select, readout: null, steps });
       } else {
@@ -378,10 +489,9 @@ func buildEditorHTML(encodedModel string) string {
 
         function updateFromNormalized(normalized) {
           const clamped = Math.max(0, Math.min(1, normalized));
-          range.value = String(clamped);
-          value.value = String(control.min + clamped * (control.max - control.min));
-          readout.textContent = Number(value.value).toFixed(3);
-          sendChange(control.id, clamped);
+          const plain = control.min + clamped * (control.max - control.min);
+          updateControl(control, clamped, plain, true);
+          persistSnapshot();
         }
 
         range.addEventListener("input", () => updateFromNormalized(Number(range.value)));
@@ -403,6 +513,7 @@ func buildEditorHTML(encodedModel string) string {
         card.appendChild(readout);
 
       controlBindings.get(control.id).readout = readout.querySelector('span:last-child');
+      controlIndex.set(control.id, control);
       return card;
     }
 
@@ -418,7 +529,22 @@ func buildEditorHTML(encodedModel string) string {
       wrapper.appendChild(grid);
       sectionsRoot.appendChild(wrapper);
     });
+
+    if (saveButton) {
+      saveButton.addEventListener("click", () => persistSnapshot());
+    }
+
+    if (restoreButton) {
+      restoreButton.addEventListener("click", () => restoreFromLocalStorage());
+      let hasSavedSnapshot = false;
+      try {
+        hasSavedSnapshot = !!window.localStorage.getItem(storageKey);
+      } catch (error) {
+        hasSavedSnapshot = false;
+      }
+      restoreButton.disabled = !hasSavedSnapshot;
+    }
   </script>
 </body>
-</html>`, encodedModel)
+</html>`, encodedSnapshot)
 }

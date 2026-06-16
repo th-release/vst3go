@@ -1,0 +1,12 @@
+./constants.go
+./editor_model.go
+./plugin.go
+./editor_model_test.go
+./helpers_pure_test.go
+_cgo_gotypes.go
+component.cgo1.go
+editor_view_darwin.cgo1.go
+helpers.cgo1.go
+wrapper.cgo1.go
+wrapper_audio.cgo1.go
+wrapper_controller.cgo1.go

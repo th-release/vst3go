@@ -529,6 +529,24 @@ func (c *componentImpl) EditorModel() (*EditorModel, error) {
 	return BuildEditorModel(c.pluginInfo, params)
 }
 
+func (c *componentImpl) EditorSnapshot() (*EditorSnapshot, error) {
+	params, err := c.parameterRegistry()
+	if err != nil {
+		return nil, err
+	}
+
+	return BuildEditorSnapshot(c.pluginInfo, params)
+}
+
+func (c *componentImpl) ApplyEditorSnapshot(snapshot *EditorSnapshot) error {
+	params, err := c.parameterRegistry()
+	if err != nil {
+		return err
+	}
+
+	return snapshot.Apply(params)
+}
+
 func (c *componentImpl) SetEditorParameter(id uint32, value float64) error {
 	return c.SetParamNormalizedWithNotification(id, value)
 }

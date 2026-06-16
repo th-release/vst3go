@@ -1,0 +1,8 @@
+./builder.go
+./builders.go
+./filter_types.go
+./formatters.go
+./parameter.go
+./registry.go
+./registry_auto.go
+./smoother.go

@@ -117,3 +117,30 @@ func TestEditorModelNilRegistry(t *testing.T) {
 		t.Fatal("BuildEditorModel() should fail for a nil registry")
 	}
 }
+
+func TestEditorSnapshotApply(t *testing.T) {
+	registry := frameworkparam.NewRegistry()
+	gain := frameworkparam.New(1, "Gain").Range(-24, 24).Default(0).Build()
+	if err := registry.Add(gain); err != nil {
+		t.Fatalf("registry.Add() failed: %v", err)
+	}
+
+	snapshot, err := BuildEditorSnapshot(frameworkplugin.Info{
+		ID:   "com.example.editor",
+		Name: "Example Editor",
+	}, registry)
+	if err != nil {
+		t.Fatalf("BuildEditorSnapshot() failed: %v", err)
+	}
+
+	snapshot.Model.Sections[0].Controls[0].Normalized = 0.9
+	snapshot.Model.Sections[0].Controls[0].Plain = gain.Denormalize(0.9)
+
+	if err := snapshot.Apply(registry); err != nil {
+		t.Fatalf("Apply() failed: %v", err)
+	}
+
+	if got := gain.GetNormalized(); got != 0.9 {
+		t.Fatalf("gain.GetNormalized() = %v, want %v", got, 0.9)
+	}
+}

@@ -1,0 +1,9 @@
+./buffers_64bit.go
+./types_test.go
+_cgo_gotypes.go
+buffers.cgo1.go
+component.cgo1.go
+stream.cgo1.go
+structs.cgo1.go
+types.cgo1.go
+_cgo_import.go

@@ -16,6 +16,14 @@ type EditorModel struct {
 	Sections []EditorSection  `json:"sections"`
 }
 
+// EditorSnapshot is a serializable capture of the current editor state.
+//
+// The snapshot currently mirrors the live model so the web editor can save and
+// restore current control values without inventing a separate persistence layer.
+type EditorSnapshot struct {
+	Model EditorModel `json:"model"`
+}
+
 // EditorPluginInfo mirrors the metadata the editor needs for display.
 type EditorPluginInfo struct {
 	ID       string `json:"id"`
@@ -99,6 +107,37 @@ func BuildEditorModel(info frameworkplugin.Info, registry *param.Registry) (*Edi
 
 	model.Sections = []EditorSection{section}
 	return model, nil
+}
+
+// BuildEditorSnapshot creates a stateful snapshot of the current editor model.
+func BuildEditorSnapshot(info frameworkplugin.Info, registry *param.Registry) (*EditorSnapshot, error) {
+	model, err := BuildEditorModel(info, registry)
+	if err != nil {
+		return nil, err
+	}
+
+	return &EditorSnapshot{Model: *model}, nil
+}
+
+// Apply writes the snapshot's parameter values back into the registry.
+func (s *EditorSnapshot) Apply(registry *param.Registry) error {
+	if registry == nil {
+		return fmt.Errorf("apply editor snapshot: nil registry")
+	}
+
+	if s == nil {
+		return fmt.Errorf("apply editor snapshot: nil snapshot")
+	}
+
+	for _, section := range s.Model.Sections {
+		for _, control := range section.Controls {
+			if paramEntry, ok := registry.GetOK(control.ID); ok {
+				paramEntry.SetNormalized(control.Normalized)
+			}
+		}
+	}
+
+	return nil
 }
 
 func inferControlKind(p *param.Parameter) string {

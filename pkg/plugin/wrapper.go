@@ -46,6 +46,8 @@ type Component interface {
 	vst3.IEditController
 	GetParameters() *param.Registry
 	EditorModel() (*EditorModel, error)
+	EditorSnapshot() (*EditorSnapshot, error)
+	ApplyEditorSnapshot(snapshot *EditorSnapshot) error
 	SetParamNormalizedWithNotification(id uint32, value float64) error
 }
 

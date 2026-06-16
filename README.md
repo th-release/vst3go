@@ -13,6 +13,8 @@ It contains:
 
 The higher-level audio and synth layer now lives in the companion `synthkit` repository.
 
+For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
+
 ## Scope
 
 `vst3go` keeps the VST3-facing pieces:

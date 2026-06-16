@@ -108,6 +108,8 @@
   - [ ] Add a web-rendered view path for the VST editor instead of a standalone site.
   - [ ] Keep the rendered UI aligned with the current plugin design and controls.
   - [ ] Make local editing and parameter changes visible immediately in the view.
+  - [ ] Keep an explicit editor snapshot for save/restore and future React hydration.
+  - [ ] Document how HTML, CSS, and JS build outputs plug into the editor shell.
 - [ ] Treat the web-rendered editor as the prerequisite for platform expansion work.
 
 ## Phase 6: Cross-Platform Windows Support
@@ -118,6 +120,7 @@
 - [ ] Extend the bridge for Windows entry points.
   - [ ] Add required DLL entry handling.
   - [ ] Export `GetPluginFactory`.
+  - [ ] Host the web-rendered editor with WebView2 on Windows.
 - [ ] Review platform-specific CGO directives.
   - [ ] Add Windows-specific flags only where necessary.
   - [ ] Minimize platform divergence.
