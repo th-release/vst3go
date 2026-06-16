@@ -24,9 +24,12 @@ header_path="${binary_dir}/${plugin_name}.h"
 mkdir -p "$binary_dir"
 cp "$plugin_dll" "$binary_path"
 
-if [[ -f "$header_source" ]]; then
-  cp "$header_source" "$header_path"
+if [[ ! -f "$header_source" ]]; then
+  echo "missing Windows VST3 header sidecar: $header_source" >&2
+  exit 1
 fi
+
+cp "$header_source" "$header_path"
 
 loader_source="$(dirname "$plugin_dll")/WebView2Loader.dll"
 if [[ -f "$loader_source" ]]; then

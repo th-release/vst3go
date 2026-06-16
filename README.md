@@ -68,7 +68,7 @@ Windows-specific editor and packaging notes:
 - Windows support currently targets `amd64` and the `x86_64-win` bundle layout.
 - `just windows-preflight` checks whether the Windows compiler can find `windows.h` and `WebView2.h`.
 - `just windows-build-dll` builds the Windows shared library when the Windows toolchain is available.
-- `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL and keeps the generated header sidecar when available.
+- `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL and requires the generated header sidecar.
 - `just windows-check-bundle` validates the resulting bundle layout.
 - `just windows-release` runs preflight, build, and validation in one go.
 - `docs/windows-build.md` describes the expected bundle shape.

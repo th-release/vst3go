@@ -220,6 +220,7 @@ static void editorViewReleaseWebView(VST3GoEditorView* view) {
     }
 
     if (view->userDataFolder) {
+        RemoveDirectoryW(view->userDataFolder);
         free(view->userDataFolder);
         view->userDataFolder = NULL;
     }
