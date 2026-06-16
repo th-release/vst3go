@@ -75,7 +75,7 @@
   - [x] `pkg/plugin` where practical
   - [x] `pkg/vst3`
 - [x] Add race-detector coverage where thread-safety assumptions are non-trivial.
-- [ ] Keep allocation-sensitive paths measurable.
+- [x] Keep allocation-sensitive paths measurable.
   - [x] Benchmark process-context internals.
   - [x] Benchmark runtime hot paths where useful.
   - [x] Revisit fixed-size internal buffers where limits may be too rigid.
@@ -114,21 +114,21 @@
 
 ## Phase 6: Cross-Platform Windows Support
 
-- [ ] Update the build system for Windows.
+- [x] Update the build system for Windows.
   - [x] Detect Windows cleanly.
   - [x] Produce the correct library format and bundle layout.
-- [ ] Extend the bridge for Windows entry points.
+- [x] Extend the bridge for Windows entry points.
   - [x] Add required DLL entry handling.
   - [x] Export `GetPluginFactory`.
   - [x] Host the web-rendered editor with WebView2 on Windows.
   - [x] Lay down the Windows editor-view scaffold.
-- [ ] Review platform-specific CGO directives.
+- [x] Review platform-specific CGO directives.
   - [x] Add Windows-specific flags only where necessary.
   - [x] Minimize platform divergence.
 - [ ] Validate on real toolchains and hosts.
   - [ ] Start with MinGW-w64.
   - [ ] Keep MSVC as a later enhancement if justified.
-- [ ] Capture Windows-specific risks.
+- [x] Capture Windows-specific risks.
   - [x] Shared-library behavior with Go.
   - [x] Scheduler differences.
   - [x] File locking and reload friction.

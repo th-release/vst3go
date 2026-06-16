@@ -2,6 +2,8 @@
 
 This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export path, but Windows packaging still needs the host toolchain and bundle layout to be wired by the consumer build.
 
+For the real-host validation checklist and required evidence, see `docs/windows-validation.md`.
+
 ## Required Pieces
 
 - A Windows CGO toolchain

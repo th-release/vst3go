@@ -15,6 +15,7 @@ The higher-level audio and synth layer now lives in the companion `synthkit` rep
 
 For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
+For the real Windows validation handoff checklist, see [`docs/windows-validation.md`](docs/windows-validation.md).
 For lifecycle, thread-safety, and persistence expectations, see [`docs/runtime-contracts.md`](docs/runtime-contracts.md).
 
 ## Scope
@@ -77,6 +78,7 @@ just test
 - This repo validates the shared runtime layer with `just test` and the Windows build path with `just windows-smoke` when the host shell is available.
 - Platform-specific integration checks, host app behavior, and downstream DSP/plugin wiring belong in the companion `synthkit` repository or the consumer project.
 - Windows packaging and bundle layout checks in this repo stay focused on the generated DLL, header sidecar, and layout contract.
+- Real Windows signoff should follow `docs/windows-validation.md` so toolchain, bundle, host, and WebView2 behavior are captured consistently.
 
 ## Release Scope
 
