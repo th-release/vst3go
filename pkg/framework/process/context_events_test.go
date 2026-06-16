@@ -164,3 +164,33 @@ func TestContextParameterAccessorsHandleMissingParameters(t *testing.T) {
 		t.Fatalf("ParamPlain(999) = %f, want 0", got)
 	}
 }
+
+func TestContextAddParameterChangeGrowsPastInitialCapacity(t *testing.T) {
+	ctx := NewContext(32, param.NewRegistry())
+
+	const changeCount = 300
+	for i := 0; i < changeCount; i++ {
+		ctx.AddParameterChange(uint32(i+1), float64(i)/100.0, i)
+	}
+
+	changes := ctx.GetParameterChanges()
+	if len(changes) != changeCount {
+		t.Fatalf("GetParameterChanges() len = %d, want %d", len(changes), changeCount)
+	}
+
+	first := changes[0]
+	last := changes[len(changes)-1]
+	if first.ParamID != 1 || first.SampleOffset != 0 {
+		t.Fatalf("first change = %+v, want ParamID=1 SampleOffset=0", first)
+	}
+	if last.ParamID != changeCount || last.SampleOffset != changeCount-1 {
+		t.Fatalf("last change = %+v, want ParamID=%d SampleOffset=%d", last, changeCount, changeCount-1)
+	}
+}
+
+func TestContextParameterChangeCapacityTracksBlockSize(t *testing.T) {
+	ctx := NewContext(512, param.NewRegistry())
+	if got := len(ctx.paramChanges); got < 512 {
+		t.Fatalf("len(paramChanges) = %d, want at least 512", got)
+	}
+}

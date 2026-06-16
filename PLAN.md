@@ -78,7 +78,7 @@
 - [ ] Keep allocation-sensitive paths measurable.
   - [x] Benchmark process-context internals.
   - [x] Benchmark runtime hot paths where useful.
-  - [ ] Revisit fixed-size internal buffers where limits may be too rigid.
+  - [x] Revisit fixed-size internal buffers where limits may be too rigid.
 - [x] Keep validation expectations explicit.
   - [x] Define minimal validation expectations for the runtime layer itself.
   - [x] Document what downstream repos such as `synthkit` must validate on their own.

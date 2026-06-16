@@ -131,13 +131,20 @@ type Context struct {
 	eventBuffer *midi.EventBuffer
 }
 
+const defaultParameterChangeCapacity = 128
+
 // NewContext creates a new process context with pre-allocated buffers
 func NewContext(maxBlockSize int, params *param.Registry) *Context {
+	paramChangeCapacity := maxBlockSize
+	if paramChangeCapacity < defaultParameterChangeCapacity {
+		paramChangeCapacity = defaultParameterChangeCapacity
+	}
+
 	return &Context{
 		workBuffer:   make([]float32, maxBlockSize),
 		tempBuffer:   make([]float32, maxBlockSize),
 		params:       params,
-		paramChanges: make([]ParameterChange, 128), // Pre-allocate space for parameter changes
+		paramChanges: make([]ParameterChange, paramChangeCapacity),
 		changeCount:  0,
 		Transport:    &TransportInfo{}, // Initialize transport info
 		eventBuffer:  midi.NewEventBuffer(),
@@ -243,20 +250,36 @@ func (c *Context) SetParameterAtOffset(paramID uint32, value float64, sampleOffs
 // AddParameterChange adds a parameter change for sample-accurate processing
 // This method is used during the parameter change collection phase
 func (c *Context) AddParameterChange(paramID uint32, value float64, sampleOffset int) {
-	// Ensure we don't exceed pre-allocated space
-	if c.changeCount < len(c.paramChanges) {
-		c.paramChanges[c.changeCount] = ParameterChange{
-			ParamID:      paramID,
-			Value:        value,
-			SampleOffset: sampleOffset,
-		}
-		c.changeCount++
+	c.ensureParameterChangeCapacity(c.changeCount + 1)
+	c.paramChanges[c.changeCount] = ParameterChange{
+		ParamID:      paramID,
+		Value:        value,
+		SampleOffset: sampleOffset,
 	}
+	c.changeCount++
 }
 
 // ResetParameterChanges clears the parameter change list for the next processing block
 func (c *Context) ResetParameterChanges() {
 	c.changeCount = 0
+}
+
+func (c *Context) ensureParameterChangeCapacity(required int) {
+	if required <= len(c.paramChanges) {
+		return
+	}
+
+	newCapacity := len(c.paramChanges)
+	if newCapacity == 0 {
+		newCapacity = defaultParameterChangeCapacity
+	}
+	for newCapacity < required {
+		newCapacity *= 2
+	}
+
+	grown := make([]ParameterChange, newCapacity)
+	copy(grown, c.paramChanges[:c.changeCount])
+	c.paramChanges = grown
 }
 
 // SortParameterChanges sorts parameter changes by sample offset for processing
