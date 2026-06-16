@@ -121,6 +121,7 @@
   - [ ] Add required DLL entry handling.
   - [ ] Export `GetPluginFactory`.
   - [ ] Host the web-rendered editor with WebView2 on Windows.
+  - [x] Lay down the Windows editor-view scaffold.
 - [ ] Review platform-specific CGO directives.
   - [ ] Add Windows-specific flags only where necessary.
   - [ ] Minimize platform divergence.
