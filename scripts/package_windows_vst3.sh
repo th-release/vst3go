@@ -12,6 +12,9 @@ plugin_name="${3:-vst3go}"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "${script_dir}/.." && pwd)"
 
+if [[ "$plugin_dll" != /* ]]; then
+  plugin_dll="${repo_root}/${plugin_dll}"
+fi
 if [[ "$bundle_root" != /* ]]; then
   bundle_root="${repo_root}/${bundle_root}"
 fi

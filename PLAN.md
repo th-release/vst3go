@@ -116,23 +116,23 @@
 
 - [ ] Update the build system for Windows.
   - [x] Detect Windows cleanly.
-  - [ ] Produce the correct library format and bundle layout.
+  - [x] Produce the correct library format and bundle layout.
 - [ ] Extend the bridge for Windows entry points.
   - [x] Add required DLL entry handling.
   - [x] Export `GetPluginFactory`.
-  - [ ] Host the web-rendered editor with WebView2 on Windows.
+  - [x] Host the web-rendered editor with WebView2 on Windows.
   - [x] Lay down the Windows editor-view scaffold.
 - [ ] Review platform-specific CGO directives.
-  - [ ] Add Windows-specific flags only where necessary.
-  - [ ] Minimize platform divergence.
+  - [x] Add Windows-specific flags only where necessary.
+  - [x] Minimize platform divergence.
 - [ ] Validate on real toolchains and hosts.
   - [ ] Start with MinGW-w64.
   - [ ] Keep MSVC as a later enhancement if justified.
 - [ ] Capture Windows-specific risks.
-  - [ ] Shared-library behavior with Go.
-  - [ ] Scheduler differences.
-  - [ ] File locking and reload friction.
-  - [ ] Path-length edge cases.
+  - [x] Shared-library behavior with Go.
+  - [x] Scheduler differences.
+  - [x] File locking and reload friction.
+  - [x] Path-length edge cases.
 
 ## Phase 7: Release Readiness
 

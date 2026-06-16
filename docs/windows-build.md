@@ -34,7 +34,7 @@ This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export
 
 - Cross-compiling from Linux is possible only when the Windows C toolchain and WebView2 headers are available.
 - Current Windows packaging targets `amd64` and the `x86_64-win` bundle layout.
-- The Windows scripts resolve relative bundle roots against the repository root, so they can be called from any working directory.
+- The Windows scripts resolve relative bundle roots, bundle inputs, and build helpers against the repository root, so they can be called from any working directory.
 - The repo-level Go tests continue to validate the shared runtime code on the current platform.
 - Windows-specific packaging validation should happen on an actual Windows toolchain.
 
