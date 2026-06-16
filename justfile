@@ -42,6 +42,9 @@ windows-preflight:
 windows-smoke:
   bash scripts/windows_toolchain_smoke.sh
 
+windows-init-report report_path='':
+  bash scripts/init_windows_validation_report.sh "{{report_path}}"
+
 windows-release bundle_root='dist/windows' plugin_name='vst3go':
   just windows-preflight
   VST3GO_WINDOWS_SKIP_PREFLIGHT=1 just windows-build-dll "{{bundle_root}}" "{{plugin_name}}"
