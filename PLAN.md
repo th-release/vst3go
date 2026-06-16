@@ -115,7 +115,7 @@
 ## Phase 6: Cross-Platform Windows Support
 
 - [ ] Update the build system for Windows.
-  - [ ] Detect Windows cleanly.
+  - [x] Detect Windows cleanly.
   - [ ] Produce the correct library format and bundle layout.
 - [ ] Extend the bridge for Windows entry points.
   - [x] Add required DLL entry handling.

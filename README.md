@@ -14,6 +14,7 @@ It contains:
 The higher-level audio and synth layer now lives in the companion `synthkit` repository.
 
 For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
+For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
 
 ## Scope
 
@@ -57,6 +58,13 @@ just fmt
 just fmt-check
 just test
 ```
+
+Windows-specific editor and packaging notes:
+
+- `bridge/windows_dll.c` provides the DLL entry point.
+- `bridge/bridge.c` exports `GetPluginFactory` for the Windows build.
+- `pkg/plugin/editor_view_windows.c` expects WebView2 headers and loader support.
+- `docs/windows-build.md` describes the expected bundle shape.
 
 ## License
 
