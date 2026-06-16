@@ -28,6 +28,8 @@ Recommended build layout for a React editor:
 
 The shell only needs a bootstrap hook that injects the encoded snapshot before the app mounts.
 
+The current runtime keeps the same shape in `pkg/plugin/editor_assets/` and embeds those files into the plugin binary; a later React build can replace that directory with generated output without changing the Go-side snapshot contract.
+
 ## State Save And Restore
 
 There are two state layers:
