@@ -230,7 +230,7 @@ func GoCreateInstance(cid *C.char, iid *C.char) unsafe.Pointer {
 	}
 
 	// Wrap in component implementation
-	component := newComponent(processor)
+	component := newComponent(processor, pluginInfo)
 
 	// Create wrapper
 	wrapper := &componentWrapper{

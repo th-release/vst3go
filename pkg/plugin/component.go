@@ -13,6 +13,7 @@ import (
 
 	"github.com/cwbudde/vst3go/pkg/framework/bus"
 	"github.com/cwbudde/vst3go/pkg/framework/param"
+	"github.com/cwbudde/vst3go/pkg/framework/plugin"
 	"github.com/cwbudde/vst3go/pkg/framework/process"
 	"github.com/cwbudde/vst3go/pkg/framework/state"
 	"github.com/cwbudde/vst3go/pkg/midi"
@@ -22,6 +23,7 @@ import (
 // componentImpl wraps a Processor to implement VST3 interfaces
 type componentImpl struct {
 	processor    Processor
+	pluginInfo   plugin.Info
 	processCtx   *process.Context
 	sampleRate   float64
 	maxBlockSize int32
@@ -60,10 +62,11 @@ func (c *componentImpl) stateManager() (*state.Manager, error) {
 }
 
 // newComponent creates a new component implementation
-func newComponent(processor Processor) *componentImpl {
+func newComponent(processor Processor, info plugin.Info) *componentImpl {
 	params := processor.GetParameters()
 	return &componentImpl{
 		processor:    processor,
+		pluginInfo:   info,
 		processCtx:   process.NewContext(8192, params), // Default max block size
 		maxBlockSize: 8192,
 	}
@@ -503,6 +506,19 @@ func (c *componentImpl) SetComponentHandler(handler interface{}) error {
 
 func (c *componentImpl) CreateView(name string) (interface{}, error) {
 	return nil, vst3.ErrNotImplemented
+}
+
+func (c *componentImpl) EditorModel() (*EditorModel, error) {
+	params, err := c.parameterRegistry()
+	if err != nil {
+		return nil, err
+	}
+
+	return BuildEditorModel(c.pluginInfo, params)
+}
+
+func (c *componentImpl) SetEditorParameter(id uint32, value float64) error {
+	return c.SetParamNormalizedWithNotification(id, value)
 }
 
 // SetParamNormalizedWithNotification sets a parameter value and notifies the host
