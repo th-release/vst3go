@@ -127,6 +127,7 @@
   - [x] Minimize platform divergence.
 - [ ] Validate on real toolchains and hosts.
   - [x] Keep script-level Windows smoke coverage on non-Windows hosts.
+  - [x] Keep a Windows-runner smoke job for shell compatibility.
   - [ ] Start with MinGW-w64.
   - [ ] Keep MSVC as a later enhancement if justified.
 - [x] Capture Windows-specific risks.
