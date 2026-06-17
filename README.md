@@ -90,7 +90,7 @@ just test
 ## Validation
 
 - This repo validates the shared runtime layer with `just test` and the Windows build path with `just windows-smoke` when the host shell is available.
-- GitHub Actions runs the repo tests, the repo build, the Windows toolchain smoke test, and the EQ8 web editor build on every push and pull request.
+- GitHub Actions runs the repo tests, the repo build, the EQ8 web editor build, and the Windows toolchain smoke test on every push and pull request.
 - Platform-specific integration checks, host app behavior, and downstream DSP/plugin wiring belong in the companion `synthkit` repository or the consumer project.
 - Windows packaging and bundle layout checks in this repo stay focused on the generated DLL, header sidecar, and layout contract.
 - Real Windows signoff should follow `docs/windows-validation.md` so toolchain, bundle, host, and WebView2 behavior are captured consistently.

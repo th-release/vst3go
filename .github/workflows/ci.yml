@@ -34,3 +34,14 @@ jobs:
       - name: Build EQ8 web editor
         working-directory: example/eq8/web
         run: npm install && npm run build
+
+  windows-smoke:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run Windows toolchain smoke test
+        shell: bash
+        run: bash scripts/windows_toolchain_smoke.sh
