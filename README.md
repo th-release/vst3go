@@ -90,7 +90,7 @@ just test
 ## Validation
 
 - This repo validates the shared runtime layer with `just test` and the Windows build path with `just windows-smoke` when the host shell is available.
-- GitHub Actions runs the repo tests, the repo build, the EQ8 web editor build, and the Windows toolchain smoke test on every push and pull request.
+- GitHub Actions runs the repo tests, the repo build, the EQ8 web editor build, and the Windows toolchain smoke test on every push and pull request, including a Windows runner smoke job.
 - Platform-specific integration checks, host app behavior, and downstream DSP/plugin wiring belong in the companion `synthkit` repository or the consumer project.
 - Windows packaging and bundle layout checks in this repo stay focused on the generated DLL, header sidecar, and layout contract.
 - Real Windows signoff should follow `docs/windows-validation.md` so toolchain, bundle, host, and WebView2 behavior are captured consistently.
@@ -99,7 +99,7 @@ just test
 
 - This repo ships the VST3 binding/runtime layer, the web-rendered editor shell, and the Windows bundle/build harness that supports that shell.
 - This repo does not ship the higher-level DSP, showcase, or product-specific synth logic; those remain in `synthkit`.
-- Release validation for this repo is centered on `just test`, `just windows-smoke`, and the documented bundle/layout checks.
+- Release validation for this repo is centered on `just test`, `just windows-smoke`, the GitHub Actions smoke coverage, and the documented bundle/layout checks.
 - Final pre-tag review should follow `docs/release-checklist.md`.
 
 Windows-specific editor and packaging notes:
