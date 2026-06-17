@@ -42,6 +42,19 @@ dist/macos/eq8.vst3/
       └─ eq8.h
 ```
 
+Minimal `Info.plist` fields:
+
+```xml
+<key>CFBundleExecutable</key>
+<string>eq8</string>
+<key>CFBundleIdentifier</key>
+<string>com.example.eq8</string>
+<key>CFBundlePackageType</key>
+<string>BNDL</string>
+<key>CFBundleVersion</key>
+<string>1</string>
+```
+
 ## Windows Bundle
 
 On Windows, build and package the EQ8 bundle with:
