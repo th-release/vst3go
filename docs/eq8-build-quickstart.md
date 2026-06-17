@@ -31,6 +31,17 @@ Expected output:
 - the generated header sidecar in `Contents/MacOS/eq8.h`
 - `Info.plist` in `Contents/Info.plist`
 
+Bundle shape:
+
+```text
+dist/macos/eq8.vst3/
+└─ Contents/
+   ├─ Info.plist
+   └─ MacOS/
+      ├─ eq8
+      └─ eq8.h
+```
+
 ## Windows Bundle
 
 On Windows, build and package the EQ8 bundle with:
@@ -46,6 +57,17 @@ Expected output:
 - the generated header sidecar in `Contents/x86_64-win/eq8.h`
 - `WebView2Loader.dll` if it is available beside the DLL output
 
+Bundle shape:
+
+```text
+dist/windows/eq8.vst3/
+└─ Contents/
+   └─ x86_64-win/
+      ├─ eq8.vst3
+      ├─ eq8.h
+      └─ WebView2Loader.dll
+```
+
 ## What To Check Next
 
 After packaging, open the bundle in a real VST3 host and verify:
@@ -56,4 +78,3 @@ After packaging, open the bundle in a real VST3 host and verify:
 - reopen and rescan flows remain stable
 
 If you are only changing Go DSP or editor logic, stay in the shared work loop until that stabilizes.
-
