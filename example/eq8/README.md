@@ -53,5 +53,6 @@ Bundle commands for this example:
 
 For a shorter step-by-step version, see [`docs/eq8-build-quickstart.md`](../../docs/eq8-build-quickstart.md).
 For host validation steps, see [`docs/eq8-host-validation.md`](../../docs/eq8-host-validation.md).
+For the one-page operator workflow, see [`docs/eq8-operator-guide.md`](../../docs/eq8-operator-guide.md).
 
 You can import this package from a downstream repo and wire it into the host/runtime layer without changing the example plugin shape.

@@ -9,7 +9,7 @@ Use this after you have built and installed the EQ8 bundle into a real VST3 host
 - copy the `.vst3` bundle into the host's VST3 folder
 - scan or rescan the plugin in the host
 
-For the build and packaging commands, see `docs/eq8-build-quickstart.md`.
+For the build and packaging commands, see `docs/eq8-operator-guide.md`.
 
 ## Validation Steps
 

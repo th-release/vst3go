@@ -19,6 +19,7 @@ For macOS bundle and packaging notes, see [`scripts/build_darwin_vst3.sh`](scrip
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
 For the EQ8 example build commands, see [`example/eq8/README.md`](example/eq8/README.md).
 For a shorter EQ8 quickstart, see [`docs/eq8-build-quickstart.md`](docs/eq8-build-quickstart.md).
+For one-page EQ8 build/install/validate flow, see [`docs/eq8-operator-guide.md`](docs/eq8-operator-guide.md).
 For EQ8 host validation, see [`docs/eq8-host-validation.md`](docs/eq8-host-validation.md).
 For the real Windows validation handoff checklist, see [`docs/windows-validation.md`](docs/windows-validation.md).
 For a condensed Windows quickstart, see [`docs/windows-validation-quickstart.md`](docs/windows-validation-quickstart.md).
