@@ -16,9 +16,11 @@ The higher-level audio and synth layer now lives in the companion `synthkit` rep
 For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
 For the real Windows validation handoff checklist, see [`docs/windows-validation.md`](docs/windows-validation.md).
+For a condensed Windows quickstart, see [`docs/windows-validation-quickstart.md`](docs/windows-validation-quickstart.md).
 For a ready-to-fill Windows validation run record, see [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md).
 For lifecycle, thread-safety, and persistence expectations, see [`docs/runtime-contracts.md`](docs/runtime-contracts.md).
 For day-to-day implementation and validation conventions, see [`docs/development-workflow.md`](docs/development-workflow.md).
+For a very detailed downstream plugin-building guide, see [`docs/developing-with-vst3go.md`](docs/developing-with-vst3go.md).
 For pre-tag signoff, see [`docs/release-checklist.md`](docs/release-checklist.md).
 For publishing notes, see [`docs/release-notes-template.md`](docs/release-notes-template.md).
 
@@ -101,6 +103,7 @@ Windows-specific editor and packaging notes:
 - `just windows-preflight` auto-selects a compatible Windows compiler when needed and checks for `windows.h`, `WebView2.h`, and `WebView2Loader`. If no compiler works, it reports the candidates it tried and why each one failed.
 - `just windows-smoke` runs a local script-only smoke test that exercises selection, preflight, build, packaging, and bundle validation without a real Windows host.
 - `just windows-init-report` creates a prefilled Windows validation report scaffold with current host metadata.
+- `just windows-validate` runs the end-to-end validation sequence on a real Windows machine and writes a report file.
 - `just windows-build-dll` builds the Windows shared library when the Windows toolchain is available.
 - `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL and requires the generated header sidecar.
 - `just windows-check-bundle` validates the resulting bundle layout.
