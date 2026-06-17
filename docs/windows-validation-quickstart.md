@@ -2,6 +2,8 @@
 
 Use this page when you are on a real Windows `amd64` machine and want the shortest path to validation.
 
+If you do not have a Windows machine, keep using GitHub Actions plus `bash scripts/windows_toolchain_smoke.sh` locally.
+
 ## One-Minute Path
 
 1. Open a shell that provides `bash` and the repo tools.
@@ -16,6 +18,7 @@ Use this page when you are on a real Windows `amd64` machine and want the shorte
 - `just windows-preflight` confirms the Windows compiler, headers, and loader are available.
 - `just windows-validate` writes a report file and stops at the first failure if anything is missing.
 - If validation passes, the report will include the log directory and completed step list.
+- CI already covers the shared Go checks, the EQ8 web build, and the Windows smoke script, so this page is only for the real-host pass.
 
 ## If It Fails
 
