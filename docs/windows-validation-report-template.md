@@ -4,6 +4,7 @@ Use this template when running the real Windows validation flow from `docs/windo
 
 If you do not have a real Windows machine, leave this template alone and rely on CI plus `bash scripts/windows_toolchain_smoke.sh` instead.
 If you do have a real Windows machine, fill out only the commands and checks you actually ran.
+For the Windows docs index, see `docs/windows-index.md`.
 
 ## Summary
 

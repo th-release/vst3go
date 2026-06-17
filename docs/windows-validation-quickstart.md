@@ -3,6 +3,7 @@
 Use this page when you are on a real Windows `amd64` machine and want the shortest path to validation.
 
 If you do not have a Windows machine, keep using GitHub Actions plus `bash scripts/windows_toolchain_smoke.sh` locally.
+For the Windows docs index, see `docs/windows-index.md`.
 
 ## One-Minute Path
 

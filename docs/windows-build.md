@@ -2,6 +2,7 @@
 
 This repo now has a Windows editor-view scaffold and a `GetPluginFactory` export path, but Windows packaging still needs the host toolchain and bundle layout to be wired by the consumer build.
 
+For a single entry point to the Windows docs, see `docs/windows-index.md`.
 For the real-host validation checklist and required evidence, see `docs/windows-validation.md`.
 For the shortest real-host run, see `docs/windows-validation-quickstart.md`.
 For the fill-in record, see `docs/windows-validation-report-template.md`.

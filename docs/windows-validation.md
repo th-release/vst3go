@@ -2,6 +2,7 @@
 
 This document is the handoff checklist for real Windows validation.
 
+For the Windows docs index, see `docs/windows-index.md`.
 The repository already covers:
 
 - shared runtime correctness with Go tests

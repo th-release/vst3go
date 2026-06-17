@@ -16,6 +16,7 @@ The higher-level audio and synth layer now lives in the companion `synthkit` rep
 For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
 For a cross-platform workflow view, see [`docs/cross-platform-development.md`](docs/cross-platform-development.md).
 For macOS bundle and packaging notes, see [`scripts/build_darwin_vst3.sh`](scripts/build_darwin_vst3.sh) and [`scripts/package_darwin_vst3.sh`](scripts/package_darwin_vst3.sh).
+For the Windows docs index, see [`docs/windows-index.md`](docs/windows-index.md).
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
 For the EQ8 docs index, see [`docs/eq8-index.md`](docs/eq8-index.md).
 For the EQ8 example build commands, see [`example/eq8/README.md`](example/eq8/README.md).
