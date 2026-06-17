@@ -4,6 +4,7 @@ This document is the handoff checklist for real Windows validation. The reposito
 
 For a ready-to-fill execution record, use `docs/windows-validation-report-template.md`.
 To create a prefilled run record with current host metadata, run `just windows-init-report`.
+To run the whole sequence on a Windows machine, use `just windows-validate`.
 
 ## Validation Goals
 
@@ -33,6 +34,7 @@ just windows-preflight
 just windows-build-dll
 just windows-build dist/windows/vst3go.dll
 just windows-check-bundle
+just windows-validate
 ```
 
 If the DLL lands in a different path, pass that path explicitly to `just windows-build`.

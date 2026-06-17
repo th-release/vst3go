@@ -101,6 +101,7 @@ Windows-specific editor and packaging notes:
 - `just windows-preflight` auto-selects a compatible Windows compiler when needed and checks for `windows.h`, `WebView2.h`, and `WebView2Loader`. If no compiler works, it reports the candidates it tried and why each one failed.
 - `just windows-smoke` runs a local script-only smoke test that exercises selection, preflight, build, packaging, and bundle validation without a real Windows host.
 - `just windows-init-report` creates a prefilled Windows validation report scaffold with current host metadata.
+- `just windows-validate` runs the end-to-end validation sequence on a real Windows machine and writes a report file.
 - `just windows-build-dll` builds the Windows shared library when the Windows toolchain is available.
 - `just windows-build <dll>` assembles a VST3 bundle directory from a built Windows DLL and requires the generated header sidecar.
 - `just windows-check-bundle` validates the resulting bundle layout.
