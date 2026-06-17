@@ -108,6 +108,8 @@ After packaging, open the bundle in a real VST3 host and verify:
 
 If you are only changing Go DSP or editor logic, stay in the shared work loop until that stabilizes.
 
+For host verification details, see `docs/eq8-host-validation.md`.
+
 ## Quick Checklist
 
 - [ ] `go test -timeout=30000s ./...`
