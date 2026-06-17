@@ -8,6 +8,7 @@ What it includes:
 - a stereo `Processor`
 - eight EQ bands with per-band enable, type, frequency, gain, and Q controls
 - bypass and analyzer controls
+- a browser-rendered editor shell under `web/editor/`
 - plain `go test` coverage for the public shape of the plugin
 
 Parameter layout:
@@ -31,5 +32,11 @@ The processor is intentionally simple:
 - it stores no custom state beyond parameters
 - it bypasses cleanly when the host sets the bypass control
 - it rebuilds band coefficients from the live registry values on each block
+
+The web editor is intentionally simple too:
+
+- it reads the same `EditorSnapshot` shape the runtime uses
+- it renders the eight band cards, global controls, and response graph
+- it posts parameter changes back in the same normalized/plain message shape used by the host bridge
 
 You can import this package from a downstream repo and wire it into the host/runtime layer without changing the example plugin shape.
