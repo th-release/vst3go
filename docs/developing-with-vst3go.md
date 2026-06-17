@@ -125,18 +125,14 @@ The builder helpers in `pkg/framework/param` are meant to keep this clean:
 
 ### Example Parameter Block
 
-For a 3-band EQ, a practical parameter set might be:
+For an `Eight EQ`-style plugin, a practical parameter set usually looks like this:
 
 - `Input Gain`
-- `Low Gain`
-- `Low Frequency`
-- `Low Q`
-- `Mid Gain`
-- `Mid Frequency`
-- `Mid Q`
-- `High Gain`
-- `High Frequency`
+- `Band 1` through `Band 8`
+  - each band usually has `Type`, `Frequency`, `Gain`, and `Q`
+  - optional extras can include `Shelf Slope`, `Stereo Link`, or `Solo`
 - `Output Gain`
+- `Analyzer`
 - `Bypass`
 
 Example setup:
@@ -147,16 +143,41 @@ func NewProcessor() *Processor {
 
 	_ = params.Add(
 		param.GainParameter(1, "Input Gain").Default(0).Build(),
-		param.GainParameter(2, "Low Gain").Default(0).Build(),
-		param.FrequencyParameter(3, "Low Frequency", 20, 2000, 120).Build(),
-		param.QParameter(4, "Low Q", 0.1, 8.0, 0.707).Build(),
-		param.GainParameter(5, "Mid Gain").Default(0).Build(),
-		param.FrequencyParameter(6, "Mid Frequency", 200, 5000, 1000).Build(),
-		param.QParameter(7, "Mid Q", 0.1, 12.0, 1.0).Build(),
-		param.GainParameter(8, "High Gain").Default(0).Build(),
-		param.FrequencyParameter(9, "High Frequency", 1000, 20000, 8000).Build(),
-		param.GainParameter(10, "Output Gain").Default(0).Build(),
-		param.New(11, "Bypass").Toggle().Bypass().Build(),
+		param.New(2, "Band 1 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(3, "Band 1 Frequency", 20, 20000, 120).Build(),
+		param.GainParameter(4, "Band 1 Gain").Default(0).Build(),
+		param.QParameter(5, "Band 1 Q", 0.1, 12.0, 0.707).Build(),
+		param.New(6, "Band 2 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(7, "Band 2 Frequency", 20, 20000, 250).Build(),
+		param.GainParameter(8, "Band 2 Gain").Default(0).Build(),
+		param.QParameter(9, "Band 2 Q", 0.1, 12.0, 0.707).Build(),
+		param.New(10, "Band 3 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(11, "Band 3 Frequency", 20, 20000, 500).Build(),
+		param.GainParameter(12, "Band 3 Gain").Default(0).Build(),
+		param.QParameter(13, "Band 3 Q", 0.1, 12.0, 1.0).Build(),
+		param.New(14, "Band 4 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(15, "Band 4 Frequency", 20, 20000, 1000).Build(),
+		param.GainParameter(16, "Band 4 Gain").Default(0).Build(),
+		param.QParameter(17, "Band 4 Q", 0.1, 12.0, 1.0).Build(),
+		param.New(18, "Band 5 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(19, "Band 5 Frequency", 20, 20000, 2000).Build(),
+		param.GainParameter(20, "Band 5 Gain").Default(0).Build(),
+		param.QParameter(21, "Band 5 Q", 0.1, 12.0, 1.0).Build(),
+		param.New(22, "Band 6 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(23, "Band 6 Frequency", 20, 20000, 4000).Build(),
+		param.GainParameter(24, "Band 6 Gain").Default(0).Build(),
+		param.QParameter(25, "Band 6 Q", 0.1, 12.0, 1.0).Build(),
+		param.New(26, "Band 7 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(27, "Band 7 Frequency", 20, 20000, 8000).Build(),
+		param.GainParameter(28, "Band 7 Gain").Default(0).Build(),
+		param.QParameter(29, "Band 7 Q", 0.1, 12.0, 1.0).Build(),
+		param.New(30, "Band 8 Type").Choice("Bell", "Low Cut", "Low Shelf", "Bell", "High Shelf", "High Cut").Build(),
+		param.FrequencyParameter(31, "Band 8 Frequency", 20, 20000, 12000).Build(),
+		param.GainParameter(32, "Band 8 Gain").Default(0).Build(),
+		param.QParameter(33, "Band 8 Q", 0.1, 12.0, 0.707).Build(),
+		param.GainParameter(34, "Output Gain").Default(0).Build(),
+		param.New(35, "Analyzer").Toggle().Build(),
+		param.New(36, "Bypass").Toggle().Bypass().Build(),
 	)
 
 	return &Processor{
@@ -276,7 +297,7 @@ The `process.Context` gives you convenient access to:
 
 ### A Good Default Pattern
 
-For a stereo EQ, a clean starting point is:
+For an `Eight EQ`-style processor, a clean starting point is:
 
 ```go
 func (p *Processor) ProcessAudio(ctx *process.Context) {
@@ -292,10 +313,8 @@ func (p *Processor) ProcessAudio(ctx *process.Context) {
 	ctx.ProcessStereo(func(ch int, input, output []float32) {
 		for i := range input {
 			sample := input[i]
-			sample = p.processLow(sample, ctx.ParamPlain(2), ctx.ParamPlain(3), ctx.ParamPlain(4))
-			sample = p.processMid(sample, ctx.ParamPlain(5), ctx.ParamPlain(6), ctx.ParamPlain(7))
-			sample = p.processHigh(sample, ctx.ParamPlain(8), ctx.ParamPlain(9))
-			sample = applyGain(sample, ctx.ParamPlain(1), ctx.ParamPlain(10))
+			sample = p.processEQChain(sample, ctx)
+			sample = applyGain(sample, ctx.ParamPlain(1), ctx.ParamPlain(34))
 			output[i] = sample
 		}
 	})
@@ -304,7 +323,7 @@ func (p *Processor) ProcessAudio(ctx *process.Context) {
 
 The filter functions above are your downstream DSP code. `vst3go` gives you the shell and the block plumbing, not a built-in EQ engine.
 
-## 7. How To Build A 3-Band EQ
+## 7. How To Build An `Eight EQ`-Style Plugin
 
 This is the most natural example because it exercises almost everything:
 
@@ -317,14 +336,17 @@ This is the most natural example because it exercises almost everything:
 
 ### 7.1 Decide The Control Model
 
-A practical 3-band EQ usually has:
+An `Eight EQ`-style plugin usually has:
 
 - input gain
-- low shelf gain and frequency
-- mid peaking gain, frequency, and Q
-- high shelf gain and frequency
+- eight independently addressable bands
+- per-band filter type
+- per-band gain, frequency, and Q
 - output gain
+- analyzer enable
 - bypass
+
+The important difference from a 3-band EQ is that the user is not thinking in three fixed tone zones anymore. They are thinking in a chain of surgical or musical filters that can be combined, adjusted independently, and shown clearly in the editor.
 
 You may also want:
 
@@ -335,7 +357,436 @@ You may also want:
 
 Keep the first version small. You can add advanced extras later.
 
-### 7.2 Decide The Filter Topology
+### 7.2 Design The Screen
+
+If the EQ is going to feel like a real instrument instead of a pile of knobs, the screen layout needs to match the signal flow.
+
+A good first screen for an `Eight EQ`-style plugin usually has four visual zones:
+
+1. **Top strip**
+   - plugin name
+   - preset selector
+   - undo/redo if your downstream app has it
+   - bypass
+   - input/output level readout
+
+2. **Center graph**
+   - response curve view
+   - eight band nodes arranged across the spectrum
+   - real-time curve response if analyzer data exists
+   - frequency axis labels
+   - gain axis labels
+
+3. **Band control matrix**
+   - one card per band, usually in a 4x2 grid on wide screens
+   - each card exposes gain, frequency, Q, and type
+   - each card can show enabled or bypass state
+   - each card can collapse into a compact row on narrow screens
+
+4. **Bottom utility strip**
+   - global bypass
+   - output gain
+   - oversampling
+   - analyzer enable
+   - mono sum or phase utility if you include it
+
+The screen should read left-to-right as:
+
+- input enters
+- bands shape the tone
+- output leaves
+
+That is the visual story users need.
+
+#### Suggested Wireframe
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│  My EQ   Preset ▼   Bypass   Input ▓▓▓▓▓   Output ▓▓▓░░      │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│                frequency response / analyzer                 │
+│          ────────●────────────●────────────●──────          │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│ Band 1     Band 2     Band 3     Band 4                      │
+│ Gain FreqQ Gain FreqQ Gain FreqQ Gain FreqQ                  │
+├──────────────────────────────────────────────────────────────┤
+│ Band 5     Band 6     Band 7     Band 8                      │
+│ Gain FreqQ Gain FreqQ Gain FreqQ Gain FreqQ                  │
+├──────────────────────────────────────────────────────────────┤
+│ Input Gain   Output Gain   Bypass   Analyzer   Oversampling  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### What Each Zone Does
+
+- the top strip anchors the product identity
+- the graph gives immediate feedback on tone shape
+- the band cards provide precise control
+- the bottom strip keeps the utility actions out of the way
+
+#### Why This Layout Works
+
+- it makes the EQ feel like a proper tool, not a generic parameter panel
+- it scales to advanced features without changing the mental model
+- it maps naturally to `EditorModel.Sections`
+- it remains readable on smaller windows because the band cards can stack
+
+#### Suggested Component Breakdown
+
+Use the screen as a set of deliberately named components:
+
+- `PluginHeader`
+  - shows plugin name, preset name, bypass, and possibly undo/redo
+  - stays compact so the graph gets the most space
+
+- `ResponseGraph`
+  - visualizes the combined EQ curve
+  - shows draggable band nodes at low, mid, and high frequency points
+  - can overlay analyzer data or a simple static curve preview
+
+- `BandCard`
+  - one card per EQ band
+  - contains gain, frequency, Q, and type controls
+  - includes a band label such as `Band 1`, `Band 2`, and so on
+  - can show a tiny state badge such as `solo`, `bypass`, or `linked`
+
+- `GlobalControls`
+  - handles input/output gain, oversampling, and analyzer toggle
+  - can also carry global bypass and utility toggles
+
+- `StatusStrip`
+  - shows sample rate, oversampling state, or license state if your product has one
+  - should be readable but never noisy
+
+If you are implementing the UI in React, those components should roughly map to independent functional components or reusable sections. If you are implementing the UI directly in HTML/CSS/JS, they should still be treated as distinct visual regions.
+
+#### Suggested Interaction Model
+
+The EQ screen should support a few predictable interactions:
+
+- dragging a node on the response graph changes frequency and gain together
+- dragging a band card knob changes only one parameter at a time
+- double-clicking a control resets it to its default
+- shift-drag can provide fine adjustment
+- hover should reveal exact values or tooltips
+- clicking a band card can focus that band in the graph
+- clicking a band type chip can cycle through filter shapes
+- bypass should always be obvious and instantly reversible
+
+The graph and the knob view should stay in sync:
+
+- if a user moves a node, the card values update immediately
+- if a host automation lane moves a parameter, the node moves too
+- if a snapshot is restored, both the graph and the cards should jump to the restored state at the same time
+
+That immediate visual synchronization is what makes the screen feel professional.
+
+#### Suggested Responsive Behavior
+
+Do not let the EQ become unusable on smaller windows.
+
+Recommended behavior:
+
+- wide screens show graph on top and eight band cards below it in a 4x2 grid
+- medium screens keep the graph wide and let the cards wrap into two rows of four
+- narrow screens stack the band cards vertically and keep the graph tall enough to remain useful
+- very narrow screens can collapse advanced controls behind a disclosure row or band drawer
+
+Also consider these platform-friendly details:
+
+- preserve a minimum hit area for draggable nodes
+- keep knob labels readable at common zoom levels
+- avoid making the graph so dense that it becomes decorative only
+- keep the parameter text visible even when the graph is hidden or collapsed
+
+#### Suggested Screen States
+
+Your EQ UI should intentionally define these states:
+
+- `Idle`
+  - plugin is open, no special warning
+
+- `Bypassed`
+  - visually dim the graph and show the bypass state clearly
+
+- `Analyzing`
+  - analyzer overlay is active
+
+- `Offline/Grace`
+  - if the product is commercial, a non-blocking banner can explain license grace or limited mode
+
+- `Narrow Layout`
+  - cards stack and the graph compresses without losing control access
+
+That state list is helpful because it prevents the UI from becoming a one-off layout with hidden assumptions.
+
+#### Suggested React Tree
+
+If you are implementing the EQ in React, a sensible component tree looks like this:
+
+```text
+<EqEditor>
+  <PluginHeader />
+  <MainSurface>
+    <ResponseGraph />
+    <BandCardGrid>
+      <BandCard band="1" />
+      <BandCard band="2" />
+      <BandCard band="3" />
+      <BandCard band="4" />
+      <BandCard band="5" />
+      <BandCard band="6" />
+      <BandCard band="7" />
+      <BandCard band="8" />
+    </BandCardGrid>
+    <GlobalControls />
+    <StatusStrip />
+  </MainSurface>
+</EqEditor>
+```
+
+Practical responsibilities for each piece:
+
+- `EqEditor`
+  - owns the overall snapshot state
+  - hydrates from the `EditorModel`
+  - routes parameter change messages back to Go
+
+- `PluginHeader`
+  - shows the plugin title and preset
+  - hosts bypass and high-level actions
+
+- `ResponseGraph`
+  - renders the frequency response
+  - receives current band values and analyzer data
+  - emits drag updates for frequency/gain points
+
+- `BandCardGrid`
+  - groups the individual band cards
+  - switches between grid and stacked layouts based on width
+
+- `BandCard`
+  - exposes band-specific controls
+  - makes it obvious which band is being edited
+  - keeps advanced controls close to the band they affect
+
+- `GlobalControls`
+  - holds output gain, oversampling, analyzer, and similar global options
+  - keeps non-band settings out of the main graph area
+
+- `StatusStrip`
+  - shows sample rate, CPU hints, or license state if applicable
+  - provides small, non-blocking status messages
+
+The same tree can be expressed in plain HTML/CSS/JS if you do not want React yet. What matters is that the responsibilities stay separated.
+
+#### Suggested HTML/CSS Structure
+
+The HTML shell should be simple and predictable:
+
+```html
+<main class="eq-editor">
+  <header class="eq-header"></header>
+  <section class="eq-graph-panel"></section>
+  <section class="eq-band-grid"></section>
+  <section class="eq-global-panel"></section>
+  <footer class="eq-status-bar"></footer>
+</main>
+```
+
+Suggested CSS behavior:
+
+- `eq-editor` uses a vertical grid or flex column
+- `eq-graph-panel` gets the tallest portion of the screen
+- `eq-band-grid` is a responsive 4-column grid on wide screens
+- `eq-global-panel` stays compact and visually subordinate
+- `eq-status-bar` uses small text and low visual weight
+
+Suggested visual hierarchy:
+
+- graph first
+- precise knobs second
+- global actions third
+- status last
+
+That hierarchy matches how people actually work on an EQ.
+
+#### Suggested React Mock
+
+Below is a realistic starting point for a downstream React editor. It is intentionally simple, but the structure is close to what you would ship.
+
+```tsx
+type EqBand = {
+  id: number
+  label: string
+  type: string
+  gain: number
+  frequency: number
+  q: number
+}
+
+function EqEditor({ model, snapshot, onParamChange }: Props) {
+  const bands = getBandsFromSnapshot(snapshot)
+
+  return (
+    <main className="eq-editor">
+      <header className="eq-header">
+        <div className="eq-title">
+          <h1>{model.plugin.name}</h1>
+          <span>{model.plugin.vendor}</span>
+        </div>
+        <button
+          className="eq-bypass"
+          onClick={() => onParamChange(36, snapshotBypassValue(snapshot))}
+        >
+          Bypass
+        </button>
+      </header>
+
+      <section className="eq-graph-panel">
+        <ResponseGraph
+          bands={bands}
+          onBandDrag={(bandId, nextFrequency, nextGain) => {
+            onParamChange(bandIdToFrequencyParamId(bandId), nextFrequency)
+            onParamChange(bandIdToGainParamId(bandId), nextGain)
+          }}
+          onBandTypeCycle={(bandId, nextType) => {
+            onParamChange(bandIdToTypeParamId(bandId), nextType)
+          }}
+        />
+      </section>
+
+      <section className="eq-band-grid">
+        {bands.map((band) => (
+          <BandCard
+            key={band.id}
+            band={band}
+            onChange={(field, value) => {
+              if (field === "gain") onParamChange(bandIdToGainParamId(band.id), value)
+              if (field === "frequency") onParamChange(bandIdToFrequencyParamId(band.id), value)
+              if (field === "q") onParamChange(bandIdToQParamId(band.id), value)
+              if (field === "type") onParamChange(bandIdToTypeParamId(band.id), value)
+            }}
+          />
+        ))}
+      </section>
+
+      <section className="eq-global-panel">
+        <Knob label="Input" />
+        <Knob label="Output" />
+        <Toggle label="Analyzer" />
+        <Toggle label="Oversampling" />
+      </section>
+
+      <footer className="eq-status-bar">
+        <span>48 kHz</span>
+        <span>Analyzer off</span>
+        <span>Host sync OK</span>
+      </footer>
+    </main>
+  )
+}
+```
+
+The exact helper functions are downstream-specific, but the structure is the important part:
+
+- the editor receives a model and a snapshot
+- band cards are generated from the snapshot data
+- user edits call back into the Go parameter bridge
+- the graph and cards share the same parameter source
+
+#### Suggested CSS Mock
+
+You can start with a layout like this:
+
+```css
+.eq-editor {
+  display: grid;
+  grid-template-rows: auto minmax(240px, 1fr) auto auto;
+  gap: 16px;
+  padding: 16px;
+  color: #f4f4f5;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 34%),
+    linear-gradient(180deg, #17171b 0%, #101114 100%);
+}
+
+.eq-header,
+.eq-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eq-graph-panel {
+  min-height: 280px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.eq-band-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.eq-global-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.eq-status-bar {
+  font-size: 12px;
+  opacity: 0.72;
+}
+
+@media (max-width: 900px) {
+  .eq-band-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .eq-global-panel {
+    grid-template-columns: 1fr;
+  }
+}
+```
+
+That mock is not trying to be pretty in the abstract. It is trying to be:
+
+- legible
+- responsive
+- easy to wire to `EditorModel`
+- easy to hydrate from Go snapshot data
+- easy to extend with a real analyzer later
+
+#### Suggested Screen Copy
+
+If you want the EQ to feel polished, decide the labels early:
+
+- `Input Gain`
+- `Band 1` through `Band 8`
+- `Bell`
+- `Shelf`
+- `Cut`
+- `Output Gain`
+- `Analyzer`
+- `Oversampling`
+- `Bypass`
+
+If you expose more advanced controls, keep the copy human-readable:
+
+- `Frequency` rather than `Freq`
+- `Phase Invert` rather than `Invert`
+- `Stereo Width` rather than `Width` if that reads better in your product
+
+The copy should make the control obvious without forcing the user to decode the UI.
+
+### 7.3 Decide The Filter Topology
 
 In a downstream repo, you will likely implement:
 
@@ -371,7 +822,7 @@ That math is downstream-specific, but the important part for `vst3go` is where y
 - reset in `SetActive(false)`
 - driven from current parameter values during `ProcessAudio`
 
-### 7.3 Keep Parameter Reads Cheap
+### 7.4 Keep Parameter Reads Cheap
 
 In `ProcessAudio`, read values once per block unless you truly need per-sample automation.
 
@@ -386,7 +837,7 @@ lowQ := ctx.ParamPlain(4)
 
 If you want sample-accurate automation, use the process context’s parameter-change flow and update coefficients or targets at the relevant offsets.
 
-### 7.4 Handle Bypass Cleanly
+### 7.5 Handle Bypass Cleanly
 
 Bypass should usually be a true bypass path:
 
@@ -399,7 +850,7 @@ if ctx.Param(11) >= 0.5 {
 
 For EQs, that is usually the most expected behavior.
 
-### 7.5 Add State Later
+### 7.6 Add State Later
 
 If your EQ only uses parameters and no hidden state, `StatefulProcessor` may be unnecessary.
 
@@ -655,7 +1106,7 @@ Here is a realistic workflow for a downstream repo:
 1. Start with a stereo utility plugin.
 2. Verify gain, pan, width, and mute in the editor.
 3. Add state save/restore for the last selected mode.
-4. Turn the utility into a 3-band EQ by swapping the DSP layer.
+4. Turn the utility into an `Eight EQ`-style plugin by swapping the DSP layer.
 5. Keep the parameter contract stable while the backend changes.
 6. Reuse the same web editor shell and only change the data fed into it.
 
