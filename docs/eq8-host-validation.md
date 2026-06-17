@@ -44,6 +44,35 @@ For the build and packaging commands, see `docs/eq8-build-quickstart.md`.
 - scan or rescan the plugin again
 - the host remains stable across repeated open/close cycles
 
+## macOS Host Checklist
+
+Use this when testing the `.vst3` bundle built by `just eq8-mac-release`:
+
+- copy `dist/macos/eq8.vst3` into `~/Library/Audio/Plug-Ins/VST3/`
+- rescan the plugin inside the host
+- confirm the host sees `EQ8 Example` from `example/eq8/plugin.go`
+- confirm the editor opens inside `WKWebView`
+- confirm band controls, bypass, and analyzer all update correctly
+- reopen the editor after closing it once
+- save and reopen the project to confirm state restore
+
+If the host exposes a plugin manager or rescan list, use it to confirm the bundle is discovered by name, not just by file presence.
+
+## Windows Host Checklist
+
+Use this when testing the `.vst3` bundle built by `just eq8-win-release`:
+
+- copy `dist/windows/eq8.vst3` into `%APPDATA%\\VST3\\` or the host's configured VST3 folder
+- rescan the plugin inside the host
+- confirm the host sees `EQ8 Example` from `example/eq8/plugin.go`
+- confirm the editor opens inside `WebView2`
+- confirm `WebView2Loader.dll` is present in the bundle when packaging expects it
+- confirm parameter updates reach the processor and redraw in the UI
+- reopen the editor after closing it once
+- save and reopen the project to confirm state restore
+
+If a host keeps a plugin cache, make sure you invalidate or rescan it after each new bundle build.
+
 ## macOS Notes
 
 - install the bundle under `~/Library/Audio/Plug-Ins/VST3/`
@@ -63,4 +92,4 @@ EQ8 validation is successful when:
 - parameter changes work
 - state restore works
 - reopen and rescan remain stable
-
+- the macOS or Windows host checklist above passes for the target OS
