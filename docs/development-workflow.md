@@ -74,6 +74,7 @@ bash scripts/windows_toolchain_smoke.sh
 
 - update `README.md` when scope, release guidance, or consumer guidance changes
 - update `docs/runtime-contracts.md` when lifecycle, thread-safety, or persistence expectations change
+- use `docs/developing-with-vst3go.md` for the detailed downstream plugin-building guide and examples
 - update `docs/web-editor-bridge.md` when editor shell behavior or asset integration changes
 - update Windows docs when build scripts, packaging rules, or validation expectations change
 
