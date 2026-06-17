@@ -81,6 +81,22 @@ dist/windows/eq8.vst3/
       └─ WebView2Loader.dll
 ```
 
+## Output Summary
+
+| Host | Build Command | Bundle Root | Binary Path |
+| --- | --- | --- | --- |
+| macOS | `just eq8-mac-release` | `dist/macos/eq8.vst3` | `Contents/MacOS/eq8` |
+| Windows | `just eq8-win-release` | `dist/windows/eq8.vst3` | `Contents/x86_64-win/eq8.vst3` |
+
+## Install Locations
+
+After packaging, copy the `.vst3` bundle into the standard VST3 folder for the host OS:
+
+- **macOS**: `~/Library/Audio/Plug-Ins/VST3/`
+- **Windows**: `%APPDATA%\\VST3\\` or the host's configured VST3 directory
+
+The host should see the `.vst3` bundle folder itself, not the raw binary inside it.
+
 ## What To Check Next
 
 After packaging, open the bundle in a real VST3 host and verify:
@@ -91,3 +107,13 @@ After packaging, open the bundle in a real VST3 host and verify:
 - reopen and rescan flows remain stable
 
 If you are only changing Go DSP or editor logic, stay in the shared work loop until that stabilizes.
+
+## Quick Checklist
+
+- [ ] `go test -timeout=30000s ./...`
+- [ ] `go build ./...`
+- [ ] `cd example/eq8/web && npm run build`
+- [ ] `just eq8-mac-release` or `just eq8-win-release`
+- [ ] copy the `.vst3` bundle into the host VST3 directory
+- [ ] open the plugin in a real VST3 host
+- [ ] verify parameter edits and state restore
