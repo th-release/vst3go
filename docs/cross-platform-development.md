@@ -61,6 +61,7 @@ For the EQ8 example specifically:
 - Hosts the editor with `WKWebView`
 - Uses the same snapshot contract as the shared Go runtime
 - Should keep platform code thin and avoid duplicating editor state
+- Packages as a `.vst3` bundle with `Contents/MacOS/<plugin-name>` and `Contents/Info.plist`
 
 ### Windows
 
@@ -84,4 +85,3 @@ A clean downstream layout usually looks like this:
 - `dist/` for packaged bundles and validation artifacts
 
 If you follow that split, each OS only needs a thin packaging layer while the audio/editor logic stays shared.
-

@@ -15,6 +15,7 @@ The higher-level audio and synth layer now lives in the companion `synthkit` rep
 
 For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
 For a cross-platform workflow view, see [`docs/cross-platform-development.md`](docs/cross-platform-development.md).
+For macOS bundle and packaging notes, see [`scripts/build_darwin_vst3.sh`](scripts/build_darwin_vst3.sh) and [`scripts/package_darwin_vst3.sh`](scripts/package_darwin_vst3.sh).
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
 For the real Windows validation handoff checklist, see [`docs/windows-validation.md`](docs/windows-validation.md).
 For a condensed Windows quickstart, see [`docs/windows-validation-quickstart.md`](docs/windows-validation-quickstart.md).

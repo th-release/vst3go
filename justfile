@@ -30,6 +30,22 @@ build:
 web-build:
   (cd example/eq8/web && npm run build)
 
+mac-package plugin_dylib bundle_root='dist/macos' plugin_name='vst3go':
+  bash scripts/package_darwin_vst3.sh "{{plugin_dylib}}" "{{bundle_root}}" "{{plugin_name}}"
+
+mac-build plugin_dylib bundle_root='dist/macos' plugin_name='vst3go':
+  just mac-package "{{plugin_dylib}}" "{{bundle_root}}" "{{plugin_name}}"
+
+mac-check-bundle bundle_root='dist/macos' plugin_name='vst3go':
+  bash scripts/check_darwin_vst3.sh "{{bundle_root}}" "{{plugin_name}}"
+
+mac-build-dylib bundle_root='dist/macos' plugin_name='vst3go':
+  bash scripts/build_darwin_vst3.sh "{{bundle_root}}" "{{plugin_name}}"
+
+mac-release bundle_root='dist/macos' plugin_name='vst3go':
+  just mac-build-dylib "{{bundle_root}}" "{{plugin_name}}"
+  just mac-check-bundle "{{bundle_root}}" "{{plugin_name}}"
+
 windows-package plugin_dll bundle_root='dist/windows' plugin_name='vst3go':
   bash scripts/package_windows_vst3.sh "{{plugin_dll}}" "{{bundle_root}}" "{{plugin_name}}"
 
