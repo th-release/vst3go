@@ -11,6 +11,13 @@ Use this after you have built and installed the EQ8 bundle into a real VST3 host
 
 For the build and packaging commands, see `docs/eq8-operator-guide.md`.
 
+If the plugin does not appear after copying the bundle:
+
+- verify the bundle path exactly matches the platform checklist below
+- verify the host points at the same VST3 directory you copied into
+- rebuild the bundle after any change to the entrypoint, plugin name, or package path
+- rescan from inside the host or restart the host completely
+
 ## Validation Steps
 
 ### 1. Plugin Discovery
@@ -18,6 +25,7 @@ For the build and packaging commands, see `docs/eq8-operator-guide.md`.
 - the host sees the EQ8 plugin
 - the plugin name and vendor text look correct
 - the host does not crash while scanning the plugin
+- the bundle is discoverable after a host restart or a rescan
 
 ### 2. Editor Open
 

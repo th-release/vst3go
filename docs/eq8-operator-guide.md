@@ -49,7 +49,22 @@ Result:
 
 The host should scan the `.vst3` bundle folder itself.
 
-## 4. Validate In A Host
+## 4. Scan In The Host
+
+1. close the host if it is already open
+2. copy the `.vst3` bundle into the VST3 folder
+3. relaunch the host or trigger a plugin rescan
+4. confirm the plugin appears as `EQ8 Example`
+5. insert it on a track or test slot
+
+If the plugin does not appear:
+
+- recheck the bundle folder name
+- recheck the internal binary path
+- make sure the host is pointed at the right VST3 directory
+- rebuild the bundle after any code change that affects the entrypoint or package name
+
+## 5. Validate In A Host
 
 Use the same checks on both platforms:
 
@@ -65,7 +80,7 @@ For platform-specific details, use:
 - `docs/eq8-build-quickstart.md`
 - `docs/eq8-host-validation.md`
 
-## 5. Keep A Tight Loop
+## 6. Keep A Tight Loop
 
 When editing DSP or the editor source:
 
@@ -74,4 +89,3 @@ When editing DSP or the editor source:
 3. run `cd example/eq8/web && npm run build`
 4. package only when behavior is stable
 5. validate in a real host
-
