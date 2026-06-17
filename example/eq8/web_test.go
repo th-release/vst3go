@@ -27,7 +27,7 @@ func TestBuildEditorHTMLInjectsAssets(t *testing.T) {
 	if !strings.Contains(html, ".band-grid") {
 		t.Fatal("embedded CSS was not included")
 	}
-	if !strings.Contains(html, "renderGraph()") {
+	if !strings.Contains(html, "vst3go.eq8.snapshot") {
 		t.Fatal("embedded JS was not included")
 	}
 }

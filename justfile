@@ -24,6 +24,12 @@ test-go:
 
 test: fmt-check test-go
 
+build:
+  env GOCACHE=/tmp/gocache GOMODCACHE=/tmp/gomodcache go build ./...
+
+web-build:
+  (cd example/eq8/web && npm run build)
+
 windows-package plugin_dll bundle_root='dist/windows' plugin_name='vst3go':
   bash scripts/package_windows_vst3.sh "{{plugin_dll}}" "{{bundle_root}}" "{{plugin_name}}"
 

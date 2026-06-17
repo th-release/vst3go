@@ -48,6 +48,13 @@ When implementing a non-trivial change, follow this order:
 - validate script-level behavior on non-Windows hosts with `bash scripts/windows_toolchain_smoke.sh`
 - validate real loading, editor behavior, and bundle install flow on a real Windows machine using `docs/windows-validation.md`
 
+## Cross-Platform Development Guidelines
+
+- develop shared plugin logic on any host OS
+- keep `pkg/plugin`, `pkg/framework/*`, and the web snapshot contract OS-neutral
+- use `docs/cross-platform-development.md` as the day-to-day workflow for shared runtime, UI, and packaging separation
+- treat final bundle creation as a platform-native step, not part of the shared runtime itself
+
 ## Validation Baseline
 
 Before closing a change that touches runtime code or docs expectations, run:
@@ -75,8 +82,10 @@ bash scripts/windows_toolchain_smoke.sh
 - update `README.md` when scope, release guidance, or consumer guidance changes
 - update `docs/runtime-contracts.md` when lifecycle, thread-safety, or persistence expectations change
 - use `docs/developing-with-vst3go.md` for the detailed downstream plugin-building guide and examples
+- use `docs/cross-platform-development.md` for OS-neutral development and packaging guidance
 - update `docs/web-editor-bridge.md` when editor shell behavior or asset integration changes
 - update Windows docs when build scripts, packaging rules, or validation expectations change
+- update `docs/cross-platform-development.md` when the cross-platform build loop or OS responsibilities change
 
 ## Release Expectations
 

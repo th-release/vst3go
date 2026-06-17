@@ -27,8 +27,8 @@ func BuildEditorHTML(encodedSnapshot string) string {
 	css := loadEditorAsset("web/editor/editor.css")
 	script := loadEditorAsset("web/editor/editor.js")
 
-	html = strings.ReplaceAll(html, "__EQ8_CSS__", css)
-	html = strings.ReplaceAll(html, "__EQ8_JS__", script)
+	html = strings.ReplaceAll(html, `<link rel="stylesheet" crossorigin href="./editor.css">`, "<style>"+css+"</style>")
+	html = strings.ReplaceAll(html, `<script type="module" crossorigin src="./editor.js"></script>`, "<script>"+script+"</script>")
 	html = strings.ReplaceAll(html, "__EQ8_SNAPSHOT__", encodedSnapshot)
 	return html
 }
