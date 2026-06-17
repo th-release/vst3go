@@ -19,6 +19,7 @@ Use this checklist before tagging a new `vst3go` release.
 
 - run `bash scripts/windows_toolchain_smoke.sh` on the current non-Windows development environment if applicable
 - confirm GitHub Actions passed the Go, EQ8 web build, and Windows smoke jobs for the release candidate
+- confirm the Windows docs index is being used as the entry point for release validation: `docs/windows-index.md`
 - confirm the latest real Windows validation followed `docs/windows-validation.md`
 - confirm a completed `docs/windows-validation-report-template.md` record exists for the target release candidate
 - confirm MinGW-w64 validation passed on a real Windows machine if Windows remains in release scope
@@ -28,7 +29,7 @@ Use this checklist before tagging a new `vst3go` release.
 - confirm `README.md` still reflects the current package surface and release scope
 - confirm `docs/runtime-contracts.md` still matches runtime behavior
 - confirm `docs/web-editor-bridge.md` still matches the editor shell contract
-- confirm `docs/windows-build.md` and `docs/windows-validation.md` still match the current scripts and bundle flow
+- confirm `docs/windows-index.md`, `docs/windows-build.md`, and `docs/windows-validation.md` still match the current scripts and bundle flow
 - confirm `PLAN.md` reflects the remaining work accurately
 
 ## Consumer Readiness

@@ -58,6 +58,7 @@ Use this template when publishing a new `vst3go` tag.
 ## References
 
 - `docs/release-checklist.md`
+- `docs/windows-index.md`
 - `docs/runtime-contracts.md`
 - `docs/windows-validation.md`
 - `docs/windows-validation-report-template.md`

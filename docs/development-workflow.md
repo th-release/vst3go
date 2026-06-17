@@ -47,6 +47,7 @@ When implementing a non-trivial change, follow this order:
 - keep WebView2 hosting concerns isolated from shared runtime packages
 - validate script-level behavior on non-Windows hosts with `bash scripts/windows_toolchain_smoke.sh`
 - rely on GitHub Actions for routine Go, web editor, and Windows smoke coverage
+- start Windows work from `docs/windows-index.md` and then drill into the specific build or validation doc you need
 - validate real loading, editor behavior, and bundle install flow on a real Windows machine using `docs/windows-validation.md`
 
 ## Cross-Platform Development Guidelines
@@ -92,5 +93,6 @@ bash scripts/windows_toolchain_smoke.sh
 
 - use `docs/release-checklist.md` before tagging
 - use `docs/release-notes-template.md` when preparing a release announcement
+- use `docs/windows-index.md` as the shared entry point for Windows release evidence
 - attach CI status and any real Windows evidence before calling Windows release-ready
 - keep Windows evidence attached when Windows remains in release scope
