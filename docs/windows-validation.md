@@ -6,6 +6,7 @@ For a ready-to-fill execution record, use `docs/windows-validation-report-templa
 To create a prefilled run record with current host metadata, run `just windows-init-report`.
 To run the whole sequence on a Windows machine and capture the result, use `just windows-validate`.
 The runner stops at the first failed step and writes the completed-step list, log directory, and failure point into the report.
+For a condensed execution path, see `docs/windows-validation-quickstart.md`.
 
 ## Validation Goals
 

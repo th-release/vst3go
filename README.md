@@ -16,6 +16,7 @@ The higher-level audio and synth layer now lives in the companion `synthkit` rep
 For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/web-editor-bridge.md).
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
 For the real Windows validation handoff checklist, see [`docs/windows-validation.md`](docs/windows-validation.md).
+For a condensed Windows quickstart, see [`docs/windows-validation-quickstart.md`](docs/windows-validation-quickstart.md).
 For a ready-to-fill Windows validation run record, see [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md).
 For lifecycle, thread-safety, and persistence expectations, see [`docs/runtime-contracts.md`](docs/runtime-contracts.md).
 For day-to-day implementation and validation conventions, see [`docs/development-workflow.md`](docs/development-workflow.md).
