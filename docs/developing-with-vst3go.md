@@ -71,11 +71,11 @@ This is the shape you want in a downstream repo:
 package myplugin
 
 import (
-	"github.com/cwbudde/vst3go/pkg/framework/bus"
-	frameworkplugin "github.com/cwbudde/vst3go/pkg/framework/plugin"
-	"github.com/cwbudde/vst3go/pkg/framework/param"
-	"github.com/cwbudde/vst3go/pkg/framework/process"
-	"github.com/cwbudde/vst3go/pkg/plugin"
+	"github.com/th-release/vst3go/pkg/framework/bus"
+	frameworkplugin "github.com/th-release/vst3go/pkg/framework/plugin"
+	"github.com/th-release/vst3go/pkg/framework/param"
+	"github.com/th-release/vst3go/pkg/framework/process"
+	"github.com/th-release/vst3go/pkg/plugin"
 )
 
 type Plugin struct{}
@@ -622,44 +622,70 @@ That hierarchy matches how people actually work on an EQ.
 Below is the starting point for a downstream React editor. It is intentionally simple, and the structure is what you ship first.
 
 ```tsx
+type EditorControl = {
+  id: number
+  normalized: number
+  plain: number
+  name: string
+}
+
+type EditorSnapshot = {
+  model: {
+    sections: Array<{
+      controls: EditorControl[]
+    }>
+  }
+}
+
 type EqBand = {
   id: number
   label: string
-  type: string
+  type: number
   gain: number
   frequency: number
   q: number
 }
 
-function makeBand(
-  snapshot: Props["snapshot"],
-  bandIndex: number,
-  typeParamId: number,
-  frequencyParamId: number,
-  gainParamId: number,
-  qParamId: number,
-): EqBand {
-  return {
-    id: bandIndex,
-    label: `Band ${bandIndex}`,
-    type: snapshot.paramValue(typeParamId),
-    frequency: snapshot.paramValue(frequencyParamId),
-    gain: snapshot.paramValue(gainParamId),
-    q: snapshot.paramValue(qParamId),
+type Props = {
+  model: {
+    plugin: {
+      name: string
+      vendor: string
+    }
   }
+  snapshot: EditorSnapshot
+  onParamChange: (id: number, plainValue: number) => void
+}
+
+const BAND_PARAMS = [
+  { type: 2, frequency: 3, gain: 4, q: 5 },
+  { type: 6, frequency: 7, gain: 8, q: 9 },
+  { type: 10, frequency: 11, gain: 12, q: 13 },
+  { type: 14, frequency: 15, gain: 16, q: 17 },
+  { type: 18, frequency: 19, gain: 20, q: 21 },
+  { type: 22, frequency: 23, gain: 24, q: 25 },
+  { type: 26, frequency: 27, gain: 28, q: 29 },
+  { type: 30, frequency: 31, gain: 32, q: 33 },
+]
+
+function controlById(snapshot: EditorSnapshot, id: number): EditorControl {
+  const controls = snapshot.model.sections[0]?.controls ?? []
+  const control = controls.find((candidate) => candidate.id === id)
+  if (!control) {
+    throw new Error(`missing control ${id}`)
+  }
+  return control
 }
 
 function EqEditor({ model, snapshot, onParamChange }: Props) {
-  const bands: EqBand[] = [
-    makeBand(snapshot, 1, 2, 3, 4, 5),
-    makeBand(snapshot, 2, 6, 7, 8, 9),
-    makeBand(snapshot, 3, 10, 11, 12, 13),
-    makeBand(snapshot, 4, 14, 15, 16, 17),
-    makeBand(snapshot, 5, 18, 19, 20, 21),
-    makeBand(snapshot, 6, 22, 23, 24, 25),
-    makeBand(snapshot, 7, 26, 27, 28, 29),
-    makeBand(snapshot, 8, 30, 31, 32, 33),
-  ]
+  const bands: EqBand[] = BAND_PARAMS.map((band, index) => ({
+    id: index + 1,
+    label: `Band ${index + 1}`,
+    type: controlById(snapshot, band.type).plain,
+    frequency: controlById(snapshot, band.frequency).plain,
+    gain: controlById(snapshot, band.gain).plain,
+    q: controlById(snapshot, band.q).plain,
+  }))
 
   return (
     <main className="eq-editor">
@@ -670,7 +696,7 @@ function EqEditor({ model, snapshot, onParamChange }: Props) {
         </div>
         <button
           className="eq-bypass"
-          onClick={() => onParamChange(36, snapshotBypassValue(snapshot))}
+          onClick={() => onParamChange(36, controlById(snapshot, 36).plain)}
         >
           Bypass
         </button>
@@ -680,11 +706,12 @@ function EqEditor({ model, snapshot, onParamChange }: Props) {
         <ResponseGraph
           bands={bands}
           onBandDrag={(bandId, nextFrequency, nextGain) => {
-            onParamChange(bandIdToFrequencyParamId(bandId), nextFrequency)
-            onParamChange(bandIdToGainParamId(bandId), nextGain)
+            const band = BAND_PARAMS[bandId - 1]
+            onParamChange(band.frequency, nextFrequency)
+            onParamChange(band.gain, nextGain)
           }}
           onBandTypeCycle={(bandId, nextType) => {
-            onParamChange(bandIdToTypeParamId(bandId), nextType)
+            onParamChange(BAND_PARAMS[bandId - 1].type, nextType)
           }}
         />
       </section>
@@ -695,10 +722,11 @@ function EqEditor({ model, snapshot, onParamChange }: Props) {
             key={band.id}
             band={band}
             onChange={(field, value) => {
-              if (field === "gain") onParamChange(bandIdToGainParamId(band.id), value)
-              if (field === "frequency") onParamChange(bandIdToFrequencyParamId(band.id), value)
-              if (field === "q") onParamChange(bandIdToQParamId(band.id), value)
-              if (field === "type") onParamChange(bandIdToTypeParamId(band.id), value)
+              const bandParams = BAND_PARAMS[band.id - 1]
+              if (field === "gain") onParamChange(bandParams.gain, value)
+              if (field === "frequency") onParamChange(bandParams.frequency, value)
+              if (field === "q") onParamChange(bandParams.q, value)
+              if (field === "type") onParamChange(bandParams.type, value)
             }}
           />
         ))}
