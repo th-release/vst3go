@@ -134,6 +134,10 @@ package_output_dir="$tmpdir/package-output"
 PATH="$success_bin" bash "$repo_root/scripts/build_windows_vst3.sh" "$package_output_dir" >/dev/null
 bash "$repo_root/scripts/check_windows_vst3.sh" "$package_output_dir" >/dev/null
 
+eq8_output_dir="$tmpdir/eq8-output"
+PATH="$success_bin" bash "$repo_root/scripts/build_windows_vst3.sh" "$eq8_output_dir" eq8 ./cmd/eq8-dll >/dev/null
+bash "$repo_root/scripts/check_windows_vst3.sh" "$eq8_output_dir" eq8 >/dev/null
+
 if [[ ! -f "$package_output_dir/vst3go.vst3/Contents/x86_64-win/vst3go.vst3" ]]; then
   echo "builder did not create the Windows DLL output" >&2
   exit 1
@@ -141,6 +145,16 @@ fi
 
 if [[ ! -f "$package_output_dir/vst3go.vst3/Contents/x86_64-win/vst3go.vst3.h" ]]; then
   echo "builder did not create the Windows header sidecar" >&2
+  exit 1
+fi
+
+if [[ ! -f "$eq8_output_dir/eq8.vst3/Contents/x86_64-win/eq8.vst3" ]]; then
+  echo "EQ8 builder did not create the Windows DLL output" >&2
+  exit 1
+fi
+
+if [[ ! -f "$eq8_output_dir/eq8.vst3/Contents/x86_64-win/eq8.vst3.h" ]]; then
+  echo "EQ8 builder did not create the Windows header sidecar" >&2
   exit 1
 fi
 

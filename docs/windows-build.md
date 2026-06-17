@@ -29,6 +29,7 @@ For the real-host validation checklist and required evidence, see `docs/windows-
 - The repo ships `scripts/package_windows_vst3.sh`, `just windows-package`, and `just windows-build` to assemble the bundle from an already-built Windows DLL, requiring the generated header sidecar.
 - The repo also ships `scripts/check_windows_vst3.sh` and `just windows-check-bundle` to validate the resulting layout, including the generated header sidecar.
 - The repo also ships `scripts/build_windows_vst3.sh` and `just windows-build-dll` to build the DLL when a Windows toolchain is available.
+- `scripts/build_windows_vst3.sh` accepts an optional plugin name and entrypoint, so the same helper can build `vst3go` or an example like `eq8`.
 - The repo also ships `scripts/select_windows_cc.sh`, `scripts/preflight_windows_vst3.sh`, and `just windows-preflight` to auto-select or verify a Windows compiler, WebView2 headers, and the loader library before a build. When selection fails, the helper prints which candidates were tried and why they were rejected.
 - `just windows-smoke` exercises the selector, preflight, build, packaging, and bundle-check scripts with fake toolchain shims so regressions can be caught on non-Windows hosts.
 - `just windows-release` runs preflight once, then the build and the layout check together.
