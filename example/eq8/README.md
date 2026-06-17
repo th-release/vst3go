@@ -51,6 +51,7 @@ Bundle commands for this example:
 - macOS: `just eq8-mac-release`
 - Windows: `just eq8-win-release`
 
+For the EQ8 docs index, see [`docs/eq8-index.md`](../../docs/eq8-index.md).
 For a shorter step-by-step version, see [`docs/eq8-build-quickstart.md`](../../docs/eq8-build-quickstart.md).
 For host validation steps, see [`docs/eq8-host-validation.md`](../../docs/eq8-host-validation.md).
 For the one-page operator workflow, see [`docs/eq8-operator-guide.md`](../../docs/eq8-operator-guide.md).
