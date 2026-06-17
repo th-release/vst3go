@@ -4,7 +4,8 @@ This document is the handoff checklist for real Windows validation. The reposito
 
 For a ready-to-fill execution record, use `docs/windows-validation-report-template.md`.
 To create a prefilled run record with current host metadata, run `just windows-init-report`.
-To run the whole sequence on a Windows machine, use `just windows-validate`.
+To run the whole sequence on a Windows machine and capture the result, use `just windows-validate`.
+The runner stops at the first failed step and writes the completed-step list, log directory, and failure point into the report.
 
 ## Validation Goals
 
@@ -49,6 +50,7 @@ Confirm all of the following:
 - the packaged bundle uses the expected `Contents/x86_64-win` layout
 - the packaged bundle contains the plugin DLL and `WebView2Loader.dll`
 - `just windows-check-bundle` exits successfully
+- `just windows-validate` writes a report file with the completed and failed step list
 
 ## Host Validation Checks
 
