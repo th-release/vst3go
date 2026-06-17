@@ -21,6 +21,7 @@ For a ready-to-fill Windows validation run record, see [`docs/windows-validation
 For lifecycle, thread-safety, and persistence expectations, see [`docs/runtime-contracts.md`](docs/runtime-contracts.md).
 For day-to-day implementation and validation conventions, see [`docs/development-workflow.md`](docs/development-workflow.md).
 For a very detailed downstream plugin-building guide, see [`docs/developing-with-vst3go.md`](docs/developing-with-vst3go.md).
+For commercial login/licensing integration guidance, see [`docs/commercial-authentication.md`](docs/commercial-authentication.md).
 For pre-tag signoff, see [`docs/release-checklist.md`](docs/release-checklist.md).
 For publishing notes, see [`docs/release-notes-template.md`](docs/release-notes-template.md).
 
