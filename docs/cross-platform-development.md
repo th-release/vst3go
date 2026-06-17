@@ -54,6 +54,17 @@ For the EQ8 example specifically:
 - inspect the generated editor shell in `example/eq8/web/editor/`
 - then validate the bundle in the target host
 
+## Concrete Commands For `eq8`
+
+Use these when you want the example plugin itself, not just the shared runtime:
+
+- shared checks anywhere: `go test -timeout=30000s ./...`
+- web editor rebuild anywhere: `cd example/eq8/web && npm run build`
+- mac bundle build: `just eq8-mac-release`
+- Windows bundle build: `just eq8-win-release`
+
+If you are iterating on shared runtime code, start with the first two commands and only move to bundle creation when the shared behavior is stable.
+
 ## Platform Roles
 
 ### macOS

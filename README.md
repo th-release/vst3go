@@ -17,6 +17,7 @@ For the web-rendered plugin editor flow, see [`docs/web-editor-bridge.md`](docs/
 For a cross-platform workflow view, see [`docs/cross-platform-development.md`](docs/cross-platform-development.md).
 For macOS bundle and packaging notes, see [`scripts/build_darwin_vst3.sh`](scripts/build_darwin_vst3.sh) and [`scripts/package_darwin_vst3.sh`](scripts/package_darwin_vst3.sh).
 For Windows build and packaging notes, see [`docs/windows-build.md`](docs/windows-build.md).
+For the EQ8 example build commands, see [`example/eq8/README.md`](example/eq8/README.md).
 For the real Windows validation handoff checklist, see [`docs/windows-validation.md`](docs/windows-validation.md).
 For a condensed Windows quickstart, see [`docs/windows-validation-quickstart.md`](docs/windows-validation-quickstart.md).
 For a ready-to-fill Windows validation run record, see [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md).

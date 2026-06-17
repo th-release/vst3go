@@ -46,4 +46,9 @@ The `web/` directory is the Vite project root:
 - `npm run build` writes the generated shell back into `web/editor/`
 - `example/eq8/web.go` embeds the generated shell for the Go example runtime
 
+Bundle commands for this example:
+
+- macOS: `just eq8-mac-release`
+- Windows: `just eq8-win-release`
+
 You can import this package from a downstream repo and wire it into the host/runtime layer without changing the example plugin shape.
