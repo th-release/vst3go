@@ -23,6 +23,8 @@ These steps are safe on macOS, Windows, and Linux:
 - editing the Go snapshot/state contracts
 - editing the React editor source and rebuilding the browser shell
 
+For a shorter `eq8`-specific version, see `docs/eq8-build-quickstart.md`.
+
 This is the best loop for most day-to-day plugin work.
 
 ## What Still Needs A Native Platform Toolchain
