@@ -85,3 +85,9 @@ A clean downstream layout usually looks like this:
 - `dist/` for packaged bundles and validation artifacts
 
 If you follow that split, each OS only needs a thin packaging layer while the audio/editor logic stays shared.
+
+For a concrete example, `example/eq8` now has:
+
+- `cmd/vst3go-dylib` for the shared runtime bundle
+- `cmd/eq8-dylib` for the EQ8-specific macOS bundle
+- the same Go runtime, editor snapshot contract, and React web source

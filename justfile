@@ -46,6 +46,16 @@ mac-release bundle_root='dist/macos' plugin_name='vst3go':
   just mac-build-dylib "{{bundle_root}}" "{{plugin_name}}"
   just mac-check-bundle "{{bundle_root}}" "{{plugin_name}}"
 
+eq8-mac-build-dylib bundle_root='dist/macos' plugin_name='eq8':
+  bash scripts/build_darwin_vst3.sh "{{bundle_root}}" "{{plugin_name}}" ./cmd/eq8-dylib
+
+eq8-mac-build plugin_dylib bundle_root='dist/macos' plugin_name='eq8':
+  bash scripts/package_darwin_vst3.sh "{{plugin_dylib}}" "{{bundle_root}}" "{{plugin_name}}"
+
+eq8-mac-release bundle_root='dist/macos' plugin_name='eq8':
+  just eq8-mac-build-dylib "{{bundle_root}}" "{{plugin_name}}"
+  just mac-check-bundle "{{bundle_root}}" "{{plugin_name}}"
+
 windows-package plugin_dll bundle_root='dist/windows' plugin_name='vst3go':
   bash scripts/package_windows_vst3.sh "{{plugin_dll}}" "{{bundle_root}}" "{{plugin_name}}"
 
