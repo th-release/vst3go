@@ -90,4 +90,5 @@ For a concrete example, `example/eq8` now has:
 
 - `cmd/vst3go-dylib` for the shared runtime bundle
 - `cmd/eq8-dylib` for the EQ8-specific macOS bundle
+- `cmd/eq8-dll` for the EQ8-specific Windows bundle
 - the same Go runtime, editor snapshot contract, and React web source

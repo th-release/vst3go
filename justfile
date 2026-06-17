@@ -56,6 +56,16 @@ eq8-mac-release bundle_root='dist/macos' plugin_name='eq8':
   just eq8-mac-build-dylib "{{bundle_root}}" "{{plugin_name}}"
   just mac-check-bundle "{{bundle_root}}" "{{plugin_name}}"
 
+eq8-win-build-dll bundle_root='dist/windows' plugin_name='eq8':
+  bash scripts/build_windows_vst3.sh "{{bundle_root}}" "{{plugin_name}}" ./cmd/eq8-dll
+
+eq8-win-build plugin_dll bundle_root='dist/windows' plugin_name='eq8':
+  bash scripts/package_windows_vst3.sh "{{plugin_dll}}" "{{bundle_root}}" "{{plugin_name}}"
+
+eq8-win-release bundle_root='dist/windows' plugin_name='eq8':
+  just eq8-win-build-dll "{{bundle_root}}" "{{plugin_name}}"
+  just windows-check-bundle "{{bundle_root}}" "{{plugin_name}}"
+
 windows-package plugin_dll bundle_root='dist/windows' plugin_name='vst3go':
   bash scripts/package_windows_vst3.sh "{{plugin_dll}}" "{{bundle_root}}" "{{plugin_name}}"
 
