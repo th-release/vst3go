@@ -35,6 +35,7 @@ Use this template when publishing a new `vst3go` tag.
 - `go test -timeout=30000s ./...`
 - `go test -race -p 1 -timeout=30000s ./...`
 - `bash scripts/windows_toolchain_smoke.sh`
+- GitHub Actions status for Go, EQ8 web build, and Windows smoke: pass / pending / fail
 - real Windows validation status: pass / pending / out of scope
 
 ## Compatibility Notes

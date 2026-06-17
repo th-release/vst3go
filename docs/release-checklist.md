@@ -18,6 +18,7 @@ Use this checklist before tagging a new `vst3go` release.
 ## Windows Validation
 
 - run `bash scripts/windows_toolchain_smoke.sh` on the current non-Windows development environment if applicable
+- confirm GitHub Actions passed the Go, EQ8 web build, and Windows smoke jobs for the release candidate
 - confirm the latest real Windows validation followed `docs/windows-validation.md`
 - confirm a completed `docs/windows-validation-report-template.md` record exists for the target release candidate
 - confirm MinGW-w64 validation passed on a real Windows machine if Windows remains in release scope
