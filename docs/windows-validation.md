@@ -1,14 +1,26 @@
 # Windows Validation Checklist
 
-This document is the handoff checklist for real Windows validation. The repository already covers shared runtime correctness with Go tests and script-level Windows smoke coverage on non-Windows hosts. The remaining work is confirming that the actual Windows toolchain, bundle, and WebView2-backed editor behave correctly on a real Windows machine.
+This document is the handoff checklist for real Windows validation.
 
-Continuous integration runs the shared Go checks, the EQ8 web editor build, and the Windows toolchain smoke script on every push and pull request, including a Windows runner smoke job for shell compatibility. CI still does not replace the real Windows host pass described here.
+The repository already covers:
+
+- shared runtime correctness with Go tests
+- script-level Windows smoke coverage on non-Windows hosts
+- a Windows runner smoke job in CI for shell compatibility
+
+What still needs a real Windows machine is the actual Windows toolchain, bundle, and WebView2-backed editor validation.
 
 For a ready-to-fill execution record, use `docs/windows-validation-report-template.md`.
 To create a prefilled run record with current host metadata, run `just windows-init-report`.
 To run the whole sequence on a Windows machine and capture the result, use `just windows-validate`.
 The runner stops at the first failed step and writes the completed-step list, log directory, and failure point into the report.
 For a condensed execution path, see `docs/windows-validation-quickstart.md`.
+
+## At A Glance
+
+- If you do not have a Windows machine, keep using CI and `bash scripts/windows_toolchain_smoke.sh`.
+- If you do have a Windows machine, use `just windows-validate` and record the result in `docs/windows-validation-report-template.md`.
+- The rest of this document is the checklist for that real-machine pass.
 
 ## Validation Goals
 
