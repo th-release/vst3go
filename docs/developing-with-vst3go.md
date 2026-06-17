@@ -629,8 +629,35 @@ type EqBand = {
   q: number
 }
 
+function makeBand(
+  snapshot: Props["snapshot"],
+  bandIndex: number,
+  typeParamId: number,
+  frequencyParamId: number,
+  gainParamId: number,
+  qParamId: number,
+): EqBand {
+  return {
+    id: bandIndex,
+    label: `Band ${bandIndex}`,
+    type: snapshot.paramValue(typeParamId),
+    frequency: snapshot.paramValue(frequencyParamId),
+    gain: snapshot.paramValue(gainParamId),
+    q: snapshot.paramValue(qParamId),
+  }
+}
+
 function EqEditor({ model, snapshot, onParamChange }: Props) {
-  const bands = getBandsFromSnapshot(snapshot)
+  const bands: EqBand[] = [
+    makeBand(snapshot, 1, 2, 3, 4, 5),
+    makeBand(snapshot, 2, 6, 7, 8, 9),
+    makeBand(snapshot, 3, 10, 11, 12, 13),
+    makeBand(snapshot, 4, 14, 15, 16, 17),
+    makeBand(snapshot, 5, 18, 19, 20, 21),
+    makeBand(snapshot, 6, 22, 23, 24, 25),
+    makeBand(snapshot, 7, 26, 27, 28, 29),
+    makeBand(snapshot, 8, 30, 31, 32, 33),
+  ]
 
   return (
     <main className="eq-editor">
