@@ -2,6 +2,8 @@
 
 This guide shows how to build a plugin on top of `vst3go`, from the first `Plugin`/`Processor` pair all the way to editor metadata, state restore, and release validation.
 
+It is prescriptive on purpose: if you are following this guide, treat the layouts, naming, and state flow below as the default implementation path.
+
 The short version is:
 
 - `vst3go` is the runtime and VST3 shell.
@@ -21,7 +23,7 @@ It does not try to be a full DAW framework.
 
 ## 1. The Three Layers You Need To Understand
 
-When you build a plugin with this repo, there are usually three separate layers:
+When you build a plugin with this repo, there are three separate layers:
 
 1. **Metadata layer**
    - `pkg/framework/plugin.Info` contains the name, ID, vendor, version, and category.
@@ -47,7 +49,7 @@ At minimum, a plugin needs:
 - a `pkg/plugin.Processor` implementation
 - a `pkg/framework/param.Registry`
 - a `pkg/framework/bus.Configuration`
-- optional custom state hooks if parameter values are not enough
+- custom state hooks when parameter values are not enough
 
 The runtime wrapper uses the following flow:
 
@@ -61,7 +63,7 @@ The runtime wrapper uses the following flow:
 
 ## 3. A Minimal Plugin Skeleton
 
-This is the shape you usually want in a downstream repo:
+This is the shape you want in a downstream repo:
 
 ```go
 package myplugin
@@ -100,7 +102,7 @@ That part is boring on purpose. The important work is in the processor itself.
 
 ## 4. Build The Processor Around Real Parameters
 
-Parameters should be designed first, not added as an afterthought.
+Parameters are designed first, not added as an afterthought.
 
 For each control, decide:
 
@@ -125,12 +127,12 @@ The builder helpers in `pkg/framework/param` are meant to keep this clean:
 
 ### Example Parameter Block
 
-For an `Eight EQ`-style plugin, a practical parameter set usually looks like this:
+For an `Eight EQ`-style plugin, the parameter set is:
 
 - `Input Gain`
 - `Band 1` through `Band 8`
-  - each band usually has `Type`, `Frequency`, `Gain`, and `Q`
-  - optional extras can include `Shelf Slope`, `Stereo Link`, or `Solo`
+  - each band has `Type`, `Frequency`, `Gain`, and `Q`
+  - optional extras are `Shelf Slope`, `Stereo Link`, and `Solo`
 - `Output Gain`
 - `Analyzer`
 - `Bypass`
@@ -212,7 +214,7 @@ Use the helpers in `pkg/framework/bus`:
 
 ### Stereo EQ
 
-Most EQs should start with a stereo main input and output:
+EQs start with a stereo main input and output:
 
 ```go
 buses := bus.Stereo()
@@ -226,7 +228,7 @@ If you are building a Utility-like tool, stereo I/O is still the normal choice:
 buses := bus.Stereo()
 ```
 
-Even if the processing is simple, keep the same I/O shape as the host expects. A utility plugin usually manipulates the stereo image, gain, and phase, so stereo in/out is the right default.
+Even if the processing is simple, keep the same I/O shape as the host expects. A utility plugin manipulates the stereo image, gain, and phase, so stereo in/out is the right default.
 
 ### Sidechain Example
 
@@ -257,7 +259,7 @@ Typical responsibilities:
 - cache sample-rate-dependent constants
 - prepare lookup tables
 
-Do not do host-independent plugin setup here if it can happen earlier.
+Do not do host-independent plugin setup here.
 
 ### `SetActive`
 
@@ -273,7 +275,7 @@ Typical responsibilities:
 
 ### `ProcessAudio`
 
-This is the realtime callback. It should be:
+This is the realtime callback. It is:
 
 - allocation-free
 - lock-free where possible
@@ -336,7 +338,7 @@ This is the most natural example because it exercises almost everything:
 
 ### 7.1 Decide The Control Model
 
-An `Eight EQ`-style plugin usually has:
+An `Eight EQ`-style plugin has:
 
 - input gain
 - eight independently addressable bands
@@ -346,22 +348,22 @@ An `Eight EQ`-style plugin usually has:
 - analyzer enable
 - bypass
 
-The important difference from a 3-band EQ is that the user is not thinking in three fixed tone zones anymore. They are thinking in a chain of surgical or musical filters that can be combined, adjusted independently, and shown clearly in the editor.
+The important difference from a 3-band EQ is that the user is not thinking in three fixed tone zones anymore. They are thinking in a chain of surgical or musical filters that are combined, adjusted independently, and shown clearly in the editor.
 
-You may also want:
+Add these after the first version ships:
 
 - output meter
 - phase invert
 - oversampling toggle
 - analyzer enable
 
-Keep the first version small. You can add advanced extras later.
+Keep the first version small.
 
 ### 7.2 Design The Screen
 
 If the EQ is going to feel like a real instrument instead of a pile of knobs, the screen layout needs to match the signal flow.
 
-A good first screen for an `Eight EQ`-style plugin usually has four visual zones:
+A first `Eight EQ` screen has four visual zones:
 
 1. **Top strip**
    - plugin name
@@ -378,10 +380,10 @@ A good first screen for an `Eight EQ`-style plugin usually has four visual zones
    - gain axis labels
 
 3. **Band control matrix**
-   - one card per band, usually in a 4x2 grid on wide screens
+   - one card per band in a 4x2 grid on wide screens
    - each card exposes gain, frequency, Q, and type
-   - each card can show enabled or bypass state
-   - each card can collapse into a compact row on narrow screens
+   - each card shows enabled or bypass state
+   - each card collapses into a compact row on narrow screens
 
 4. **Bottom utility strip**
    - global bypass
@@ -390,7 +392,7 @@ A good first screen for an `Eight EQ`-style plugin usually has four visual zones
    - analyzer enable
    - mono sum or phase utility if you include it
 
-The screen should read left-to-right as:
+The screen reads left-to-right as:
 
 - input enters
 - bands shape the tone
@@ -431,55 +433,55 @@ That is the visual story users need.
 - it makes the EQ feel like a proper tool, not a generic parameter panel
 - it scales to advanced features without changing the mental model
 - it maps naturally to `EditorModel.Sections`
-- it remains readable on smaller windows because the band cards can stack
+- it remains readable on smaller windows because the band cards stack
 
 #### Suggested Component Breakdown
 
 Use the screen as a set of deliberately named components:
 
 - `PluginHeader`
-  - shows plugin name, preset name, bypass, and possibly undo/redo
+  - shows plugin name, preset name, bypass, and undo/redo when supported
   - stays compact so the graph gets the most space
 
 - `ResponseGraph`
   - visualizes the combined EQ curve
   - shows draggable band nodes at low, mid, and high frequency points
-  - can overlay analyzer data or a simple static curve preview
+  - overlays analyzer data or a simple static curve preview
 
 - `BandCard`
   - one card per EQ band
   - contains gain, frequency, Q, and type controls
   - includes a band label such as `Band 1`, `Band 2`, and so on
-  - can show a tiny state badge such as `solo`, `bypass`, or `linked`
+  - shows a tiny state badge such as `solo`, `bypass`, or `linked`
 
 - `GlobalControls`
   - handles input/output gain, oversampling, and analyzer toggle
-  - can also carry global bypass and utility toggles
+  - carries global bypass and utility toggles
 
 - `StatusStrip`
   - shows sample rate, oversampling state, or license state if your product has one
-  - should be readable but never noisy
+  - stays readable but never noisy
 
-If you are implementing the UI in React, those components should roughly map to independent functional components or reusable sections. If you are implementing the UI directly in HTML/CSS/JS, they should still be treated as distinct visual regions.
+If you are implementing the UI in React, those components map to independent functional components or reusable sections. If you are implementing the UI directly in HTML/CSS/JS, they are still distinct visual regions.
 
 #### Suggested Interaction Model
 
-The EQ screen should support a few predictable interactions:
+The EQ screen supports these interactions:
 
 - dragging a node on the response graph changes frequency and gain together
 - dragging a band card knob changes only one parameter at a time
 - double-clicking a control resets it to its default
-- shift-drag can provide fine adjustment
-- hover should reveal exact values or tooltips
+- shift-drag provides fine adjustment
+- hover reveals exact values or tooltips
 - clicking a band card can focus that band in the graph
 - clicking a band type chip can cycle through filter shapes
-- bypass should always be obvious and instantly reversible
+- bypass is always obvious and instantly reversible
 
-The graph and the knob view should stay in sync:
+The graph and the knob view stay in sync:
 
 - if a user moves a node, the card values update immediately
 - if a host automation lane moves a parameter, the node moves too
-- if a snapshot is restored, both the graph and the cards should jump to the restored state at the same time
+- if a snapshot is restored, both the graph and the cards jump to the restored state at the same time
 
 That immediate visual synchronization is what makes the screen feel professional.
 
@@ -487,12 +489,12 @@ That immediate visual synchronization is what makes the screen feel professional
 
 Do not let the EQ become unusable on smaller windows.
 
-Recommended behavior:
+Required behavior:
 
 - wide screens show graph on top and eight band cards below it in a 4x2 grid
 - medium screens keep the graph wide and let the cards wrap into two rows of four
 - narrow screens stack the band cards vertically and keep the graph tall enough to remain useful
-- very narrow screens can collapse advanced controls behind a disclosure row or band drawer
+- very narrow screens collapse advanced controls behind a disclosure row or band drawer
 
 Also consider these platform-friendly details:
 
@@ -503,7 +505,7 @@ Also consider these platform-friendly details:
 
 #### Suggested Screen States
 
-Your EQ UI should intentionally define these states:
+Your EQ UI defines these states:
 
 - `Idle`
   - plugin is open, no special warning
@@ -515,7 +517,7 @@ Your EQ UI should intentionally define these states:
   - analyzer overlay is active
 
 - `Offline/Grace`
-  - if the product is commercial, a non-blocking banner can explain license grace or limited mode
+  - if the product is commercial, a non-blocking banner explains license grace or limited mode
 
 - `Narrow Layout`
   - cards stack and the graph compresses without losing control access
@@ -524,7 +526,7 @@ That state list is helpful because it prevents the UI from becoming a one-off la
 
 #### Suggested React Tree
 
-If you are implementing the EQ in React, a sensible component tree looks like this:
+If you are implementing the EQ in React, the component tree is:
 
 ```text
 <EqEditor>
@@ -577,14 +579,14 @@ Practical responsibilities for each piece:
   - keeps non-band settings out of the main graph area
 
 - `StatusStrip`
-  - shows sample rate, CPU hints, or license state if applicable
+  - shows sample rate, CPU hints, or license state when relevant
   - provides small, non-blocking status messages
 
-The same tree can be expressed in plain HTML/CSS/JS if you do not want React yet. What matters is that the responsibilities stay separated.
+The same tree can be expressed in plain HTML/CSS/JS. The responsibilities stay separated either way.
 
 #### Suggested HTML/CSS Structure
 
-The HTML shell should be simple and predictable:
+The HTML shell is simple and predictable:
 
 ```html
 <main class="eq-editor">
@@ -596,7 +598,7 @@ The HTML shell should be simple and predictable:
 </main>
 ```
 
-Suggested CSS behavior:
+Required CSS behavior:
 
 - `eq-editor` uses a vertical grid or flex column
 - `eq-graph-panel` gets the tallest portion of the screen
@@ -604,7 +606,7 @@ Suggested CSS behavior:
 - `eq-global-panel` stays compact and visually subordinate
 - `eq-status-bar` uses small text and low visual weight
 
-Suggested visual hierarchy:
+Required visual hierarchy:
 
 - graph first
 - precise knobs second
@@ -613,9 +615,9 @@ Suggested visual hierarchy:
 
 That hierarchy matches how people actually work on an EQ.
 
-#### Suggested React Mock
+#### React Mock
 
-Below is a realistic starting point for a downstream React editor. It is intentionally simple, but the structure is close to what you would ship.
+Below is the starting point for a downstream React editor. It is intentionally simple, and the structure is what you ship first.
 
 ```tsx
 type EqBand = {
@@ -690,16 +692,16 @@ function EqEditor({ model, snapshot, onParamChange }: Props) {
 }
 ```
 
-The exact helper functions are downstream-specific, but the structure is the important part:
+The helper functions are downstream-specific, but the structure is the important part:
 
 - the editor receives a model and a snapshot
 - band cards are generated from the snapshot data
 - user edits call back into the Go parameter bridge
 - the graph and cards share the same parameter source
 
-#### Suggested CSS Mock
+#### CSS Mock
 
-You can start with a layout like this:
+Use this layout:
 
 ```css
 .eq-editor {
@@ -756,7 +758,7 @@ You can start with a layout like this:
 }
 ```
 
-That mock is not trying to be pretty in the abstract. It is trying to be:
+This mock is not decorative. It is:
 
 - legible
 - responsive
@@ -766,7 +768,7 @@ That mock is not trying to be pretty in the abstract. It is trying to be:
 
 #### Suggested Screen Copy
 
-If you want the EQ to feel polished, decide the labels early:
+If you want the EQ to feel polished, use these labels:
 
 - `Input Gain`
 - `Band 1` through `Band 8`
@@ -784,17 +786,17 @@ If you expose more advanced controls, keep the copy human-readable:
 - `Phase Invert` rather than `Invert`
 - `Stereo Width` rather than `Width` if that reads better in your product
 
-The copy should make the control obvious without forcing the user to decode the UI.
+The copy makes the control obvious without forcing the user to decode the UI.
 
 ### 7.3 Decide The Filter Topology
 
-In a downstream repo, you will likely implement:
+In a downstream repo, you implement:
 
 - a low shelf biquad
 - a peaking mid band biquad
 - a high shelf biquad
 
-For each channel, you usually keep coefficient/state structs like:
+For each channel, keep coefficient/state structs like:
 
 ```go
 type biquad struct {
@@ -839,7 +841,7 @@ If you want sample-accurate automation, use the process context’s parameter-ch
 
 ### 7.5 Handle Bypass Cleanly
 
-Bypass should usually be a true bypass path:
+Bypass is a true bypass path:
 
 ```go
 if ctx.Param(11) >= 0.5 {
@@ -848,11 +850,11 @@ if ctx.Param(11) >= 0.5 {
 }
 ```
 
-For EQs, that is usually the most expected behavior.
+For EQs, that is the expected behavior.
 
 ### 7.6 Add State Later
 
-If your EQ only uses parameters and no hidden state, `StatefulProcessor` may be unnecessary.
+If your EQ only uses parameters and no hidden state, `StatefulProcessor` is unnecessary.
 
 If you add features like:
 
@@ -893,11 +895,11 @@ _ = params.Add(
 )
 ```
 
-You can make `Width` a `MixParameter` or a custom `0..200%` control depending on how you want to define stereo expansion.
+Make `Width` a `MixParameter` or a custom `0..200%` control depending on how you define stereo expansion.
 
 ### 8.2 Processing Strategy
 
-The processing order usually looks like:
+The processing order is:
 
 1. apply input gain
 2. optionally collapse to mono
@@ -940,7 +942,7 @@ func (p *Processor) ProcessAudio(ctx *process.Context) {
 			sample = applyGain(sample, inputGain, 0)
 
 			if mono {
-				// Downstream implementation would usually average both channels.
+				// Downstream implementation averages both channels.
 				// This branch is just the structural idea.
 			}
 
@@ -963,7 +965,7 @@ The exact gain math is up to you. The point is to keep the plugin behavior user-
 
 The editor path in this repo is built on `EditorModel` and `EditorSnapshot`.
 
-That means your plugin should think in terms of:
+That means your plugin thinks in terms of:
 
 - parameter metadata
 - current normalized values
@@ -984,7 +986,7 @@ Your job is to make sure the registry is clean:
 
 ### 9.2 What The Editor Should Not Do
 
-The editor should not invent its own state source.
+The editor never invents its own state source.
 
 Instead:
 
@@ -998,14 +1000,14 @@ Instead:
 Use these flags deliberately:
 
 - `IsHidden` for internal or unsupported controls
-- `IsReadOnly` for meters or values that should display but not be edited
-- `CanAutomate` for values the host may write to
+- `IsReadOnly` for meters or values that display but are not edited
+- `CanAutomate` for values the host writes to
 
-If you add a meter, you usually want it read-only and not automatable.
+If you add a meter, make it read-only and not automatable.
 
 ## 10. Saving And Restoring State
 
-If parameter values are enough, you may not need custom state at all.
+If parameter values are enough, do not add custom state.
 
 If not, implement `StatefulProcessor`:
 
@@ -1063,7 +1065,7 @@ Suggested division:
 
 - `plugin/processor.go` owns the runtime processor
 - `plugin/plugin.go` owns the `Plugin` entrypoint and metadata
-- `plugin/state.go` owns optional custom state
+- `plugin/state.go` owns custom state when parameter values are not enough
 - `internal/dsp/` owns the filter/math code
 - `web/editor/` owns the browser-rendered UI if you generate one
 
@@ -1080,9 +1082,9 @@ When you start a new plugin, ask these questions in order:
 5. What state must survive reload?
 6. What must the editor show immediately?
 7. What needs to be automatable?
-8. What should be hidden?
+8. What is hidden?
 
-That sequence usually leads to a sane first version.
+That sequence leads to a sane first version.
 
 ## 13. Suggested Development Order
 
@@ -1143,7 +1145,7 @@ If Windows is in scope, also verify:
 
 ## 17. Closing Advice
 
-The best `vst3go` plugin code is usually very boring in the right places:
+The best `vst3go` plugin code is very boring in the right places:
 
 - metadata is explicit
 - parameters are named carefully
