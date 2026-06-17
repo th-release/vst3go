@@ -4,6 +4,8 @@ This guide shows how to build a plugin on top of `vst3go`, from the first `Plugi
 
 It is prescriptive on purpose: if you are following this guide, treat the layouts, naming, and state flow below as the default implementation path.
 
+If you follow the full guide in order, you end up with one working plugin: one metadata definition, one processor, one editor shell, one state path, and one validation flow.
+
 The short version is:
 
 - `vst3go` is the runtime and VST3 shell.
@@ -1100,7 +1102,7 @@ Keep `vst3go` itself as the runtime dependency, not the product workspace.
 
 ## 12. How To Think About A Real Plugin Project
 
-When you start a new plugin, ask these questions in order:
+When you start a new plugin, answer these questions in order:
 
 1. What is the user trying to do?
 2. What are the 5 to 12 controls that actually matter?
@@ -1111,11 +1113,11 @@ When you start a new plugin, ask these questions in order:
 7. What needs to be automatable?
 8. What is hidden?
 
-That sequence leads to a sane first version.
+That sequence defines the first version. Do not add extra branches until those eight answers are fixed.
 
 ## 13. Suggested Development Order
 
-For a new plugin, do the work in this order:
+For a new plugin, do the work in this order and do not skip ahead:
 
 1. define plugin metadata
 2. define buses
@@ -1128,9 +1130,11 @@ For a new plugin, do the work in this order:
 9. test with `just test`
 10. run Windows validation if Windows is in scope
 
+If you complete steps 1 through 10, you have a single downstream plugin that can be built, opened, edited, saved, restored, and validated.
+
 ## 14. A Practical Example Workflow
 
-Here is a realistic workflow for a downstream repo:
+Here is the workflow for a downstream repo:
 
 1. Start with a stereo utility plugin.
 2. Verify gain, pan, width, and mute in the editor.
@@ -1139,7 +1143,7 @@ Here is a realistic workflow for a downstream repo:
 5. Keep the parameter contract stable while the backend changes.
 6. Reuse the same web editor shell and only change the data fed into it.
 
-That sequence keeps the project from becoming a pile of disconnected ideas.
+That sequence produces one coherent plugin instead of a collection of unrelated experiments.
 
 ## 15. What To Avoid
 
