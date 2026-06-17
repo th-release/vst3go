@@ -63,6 +63,9 @@ If the plugin does not appear:
 - recheck the internal binary path
 - make sure the host is pointed at the right VST3 directory
 - rebuild the bundle after any code change that affects the entrypoint or package name
+- delete the old bundle before copying the new one
+- restart the host if its plugin cache does not refresh on rescan
+- confirm the bundle name is `eq8.vst3`, not the raw binary name
 
 ## 5. Validate In A Host
 
@@ -89,3 +92,10 @@ When editing DSP or the editor source:
 3. run `cd example/eq8/web && npm run build`
 4. package only when behavior is stable
 5. validate in a real host
+
+If the host still loads an old build:
+
+- remove the previous `eq8.vst3` bundle from the plugin folder
+- copy the fresh bundle again
+- force a full rescan or restart the host
+- recheck the bundle's internal binary path before testing again
