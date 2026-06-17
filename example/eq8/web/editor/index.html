@@ -3,63 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-__EQ8_CSS__
-  </style>
+  <meta name="color-scheme" content="dark" />
+  <title>EQ8 Example</title>
+  <script type="module" crossorigin src="./editor.js"></script>
+  <link rel="stylesheet" crossorigin href="./editor.css">
 </head>
 <body>
-  <div class="shell">
-    <header class="topbar">
-      <div class="titleblock">
-        <p class="eyebrow" id="plugin-vendor">Example Audio</p>
-        <h1 id="plugin-name">EQ8 Example</h1>
-        <p class="lede" id="plugin-meta">Eight-band browser editor</p>
-      </div>
-      <div class="editor-actions">
-        <div class="pill" id="snapshot-status">Live snapshot</div>
-        <button id="save-snapshot" type="button">Save snapshot</button>
-        <button id="restore-snapshot" type="button">Restore snapshot</button>
-      </div>
-    </header>
-
-    <main class="surface">
-      <section class="graph-panel">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Response</p>
-            <h2>Frequency curve</h2>
-          </div>
-          <div class="panel-tags">
-            <span class="pill" id="bypass-pill">Bypass off</span>
-            <span class="pill" id="analyzer-pill">Analyzer off</span>
-          </div>
-        </div>
-        <svg viewBox="0 0 1000 360" class="graph" id="response-graph" aria-label="EQ response graph"></svg>
-      </section>
-
-      <section class="section">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Bands</p>
-            <h2>Eight EQ bands</h2>
-          </div>
-        </div>
-        <div class="band-grid" id="band-grid"></div>
-      </section>
-
-      <section class="section">
-        <div class="panel-heading">
-          <div>
-            <p class="eyebrow">Global</p>
-            <h2>Input, output, and utilities</h2>
-          </div>
-        </div>
-        <div class="global-grid" id="global-grid"></div>
-      </section>
-    </main>
-  </div>
+  <div id="root"></div>
   <script>
-__EQ8_JS__
+    window.__EQ8_SNAPSHOT__ = "__EQ8_SNAPSHOT__";
   </script>
 </body>
 </html>
