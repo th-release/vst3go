@@ -7,6 +7,8 @@
 - Result: blocked
 - Scope attempted: real Windows validation preflight
 
+At the time of this attempt, CI coverage had not yet been added. Today, GitHub Actions covers the shared Go checks, EQ8 web build, and Windows smoke script, but that still does not replace a real Windows host pass.
+
 ## Environment
 
 - Host OS: Darwin
@@ -39,7 +41,7 @@ tried:
 ### `bash scripts/windows_toolchain_smoke.sh`
 
 - Result: passed
-- Notes: script-level regression coverage still works on this non-Windows host, but this does not satisfy the real Windows validation requirement.
+- Notes: script-level regression coverage still works on this non-Windows host, and CI now covers the same smoke path, but neither satisfies the real Windows validation requirement.
 
 ## Decision
 
