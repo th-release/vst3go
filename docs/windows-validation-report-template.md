@@ -2,6 +2,9 @@
 
 Use this template when running the real Windows validation flow from `docs/windows-validation.md`.
 
+If you do not have a real Windows machine, leave this template alone and rely on CI plus `bash scripts/windows_toolchain_smoke.sh` instead.
+If you do have a real Windows machine, fill out only the commands and checks you actually ran.
+
 ## Summary
 
 - Date:
@@ -21,6 +24,8 @@ Use this template when running the real Windows validation flow from `docs/windo
 - Host application version:
 
 ## Commands
+
+Record the command output only for the steps you ran on the real Windows machine.
 
 ### `go test -timeout=30000s ./...`
 
@@ -98,6 +103,8 @@ paste output here
 - Crash log paths:
 - Additional notes:
 
+Only attach evidence for failures or the host behaviors you needed to confirm manually.
+
 ## Issues
 
 ### Issue 1
@@ -123,3 +130,5 @@ paste output here
 - MinGW-w64 validation complete: yes / no
 - Ready to keep Windows in release scope: yes / no
 - Follow-up tasks:
+
+If Windows validation is still blocked by missing hardware or a missing host, mark that clearly here so the next person does not have to rediscover it.
