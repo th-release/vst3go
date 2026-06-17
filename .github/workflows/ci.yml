@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Go tests
+        run: GOCACHE="${{ runner.temp }}/gocache" GOMODCACHE="${{ runner.temp }}/gomodcache" go test -timeout=30000s ./...
+
+      - name: Build Go packages
+        run: GOCACHE="${{ runner.temp }}/gocache" GOMODCACHE="${{ runner.temp }}/gomodcache" go build ./...
+
+      - name: Run Windows toolchain smoke test
+        run: bash scripts/windows_toolchain_smoke.sh
+
+      - name: Build EQ8 web editor
+        working-directory: example/eq8/web
+        run: npm install && npm run build
