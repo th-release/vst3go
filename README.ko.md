@@ -2,6 +2,9 @@
 
 # VST3Go
 
+> [!IMPORTANT]
+> 이 프로젝트는 **[github.com/meteuix/vst3go](https://github.com/meteuix/vst3go)** 로 옮겨졌습니다. 이 저장소는 보관(archive) 처리되어 더 이상 업데이트되지 않습니다. 이슈, 풀 리퀘스트, 릴리스는 새 저장소를 이용해 주세요.
+
 [![ci](https://github.com/th-release/vst3go/actions/workflows/ci.yml/badge.svg)](https://github.com/th-release/vst3go/actions/workflows/ci.yml) [![Go Reference](https://pkg.go.dev/badge/github.com/th-release/vst3go/v2.svg)](https://pkg.go.dev/github.com/th-release/vst3go/v2) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 `vst3go`는 VST3를 위한 저수준 Go 인터페이스이자 런타임 계층입니다.

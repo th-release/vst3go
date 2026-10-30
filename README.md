@@ -2,6 +2,9 @@ English | [한국어](README.ko.md)
 
 # VST3Go
 
+> [!IMPORTANT]
+> This project has moved to **[github.com/meteuix/vst3go](https://github.com/meteuix/vst3go)**. This repository is archived and receives no further updates; use the new repository for issues, pull requests and releases.
+
 [![ci](https://github.com/th-release/vst3go/actions/workflows/ci.yml/badge.svg)](https://github.com/th-release/vst3go/actions/workflows/ci.yml) [![Go Reference](https://pkg.go.dev/badge/github.com/th-release/vst3go/v2.svg)](https://pkg.go.dev/github.com/th-release/vst3go/v2) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 `vst3go` is the low-level Go interface and runtime layer for VST3.
